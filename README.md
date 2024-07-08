@@ -2,12 +2,23 @@
 
 ## Build
 
-It is recommended that you configure with `ccmake` (`sudo apt install cmake-curses-gui`) to see the various options. To do so, replace `cmake` with `ccmake` in the below instructions.
-
+It is recommended that you configure with `ccmake` (`sudo apt install cmake-curses-gui`) to see the various options. Otherwise use `cmake` instead of `ccmake` and set flags manually.
 ```bash
 mkdir build && cd build
-cmake ..
+ccmake ..
 make -j
+```
+
+## Install/Uninstall
+
+Install with:
+```bash
+sudo make install
+```
+
+Uninstall with:
+```bash
+sudo make uninstall
 ```
 
 ## Usage
