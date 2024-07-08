@@ -23,12 +23,32 @@ sudo make uninstall
 
 ## Usage
 
-Include all built functions and helpers with:
+`cmake` can be employed to use this library in your work. Having installed `convert` to your system, add the following lines to your project's `CMakeLists.txt`:
+```cmake
+find_package(convert REQUIRED)
+```
+
+Include the directories with your target:
+```cmake
+target_include_directories(your_target SYSTEM PUBLIC ${convert_INCLUDE_DIRS})
+```
+
+Link to the library:
+```cmake
+target_link_libraries(your_target PUBLIC ${convert_LIBRARIES})
+```
+
+Add definitions to target (to enable module headers in `<convert/convert.hpp>`):
+```cmake
+target_compile_definitions(your_target PUBLIC ${convert_DEFINITIONS})
+```
+
+Then in your code, include all built functions and helpers with:
 ```cpp
 #include <convert/convert.hpp>
 ```
 
-Alternatively, it is recommended to include the helpers after the header of the required conversion, e.g.
+Alternatively, include only the required conversion, and the helpers (must be after), e.g.
 ```cpp
 #include <convert/eigen_ros/eigen_ros.hpp>
 #include <convert/convert_helpers.hpp>
