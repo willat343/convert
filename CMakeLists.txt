@@ -12,13 +12,21 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel" )
 endif()
 
-# Options
+# General Options
 option(BUILD_DOCUMENTATION "Build Doxygen Documentation" OFF)
 option(BUILD_TESTS "Build Tests" OFF)
-option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" OFF)
-option(BUILD_MANIF_COMPONENTS "Build Eigen Components" OFF)
-option(BUILD_MATLAB_COMPONENTS "Build Eigen Components" OFF)
-option(BUILD_ROS_COMPONENTS "Build Eigen Components" OFF)
+
+# Find packages quietly to set defaults
+find_package(Eigen3 3.3 QUIET)
+find_package(manif QUIET)
+find_package(Matlab QUIET)
+find_package(geometry_msgs QUIET)
+
+# Component Options
+option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ${Eigen3_FOUND})
+option(BUILD_MANIF_COMPONENTS "Build manif Components" ${manif_FOUND})
+option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ${Matlab_FOUND})
+option(BUILD_ROS_COMPONENTS "Build ROS Components" ${geometry_msgs_FOUND})
 
 # Template backtrace limit
 set(TEMPLATE_BACKTRACE_LIMIT "10" CACHE STRING "Template backtrace limit for compilation error verbosity. 0 to disable." FORCE)
