@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "convert/eigen_ros/geometry_msgs.hpp"
+#include "convert/eigen_ros/std_msgs.hpp"
 
 namespace convert {
 
