@@ -1,6 +1,9 @@
 #ifndef CONVERT_CONVERT_HPP
 #define CONVERT_CONVERT_HPP
 
+#if defined(CONVERT_EIGEN)
+#include "convert/eigen/eigen.hpp"
+#endif
 #if defined(CONVERT_EIGEN) && defined(CONVERT_ROS)
 #include "convert/eigen_ros/eigen_ros.hpp"
 #endif
