@@ -64,7 +64,12 @@ This function can be used directly (e.g. if `ToType` already exists) or using th
 ToType out = to<ToType>(in);
 ```
 
-For multi-to-one, one-to-multi or multi-to-multi conversions, consult the documentation.
+There is also a helper for 2-to-1 mappings, however currently all template types sometimes need to be provided to avoid overload confusion:
+```cpp
+ToType out = to<ToType, From1Type, From2Type>(from1, from2);
+```
+
+For multi-to-one, one-to-multi, multi-to-multi and other special conversions, consult the documentation.
 
 Note that some conversions are lossy or incomplete, if the input contains more or less data than the output. When this occurs, it is (or should be) documented. The user is responsible for using conversions suitable for their purpose.
 
