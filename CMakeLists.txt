@@ -153,51 +153,48 @@ endif()
 # Remove duplicates from definitions
 list(REMOVE_DUPLICATES CONVERT_DEFINITIONS)
 
-# Library name
-set(CONVERT_LIBRARY ${PROJECT_NAME})
-
 # Install directories
 include(GNUInstallDirs)
 
 # Compile of library and tests
 if (CONVERT_SRC_FILES)
-    message(DEBUG "Building convert library as lib${CONVERT_LIBRARY}.so with\n\
+    message(DEBUG "Building convert library as lib${PROJECT_NAME}.so with\n\
         CONVERT_SRC_FILES = ${CONVERT_SRC_FILES}\n\
         CONVERT_DEFINITIONS = ${CONVERT_DEFINITIONS}\n\
         CONVERT_SYSTEM_INCLUDE_DIRS = ${CONVERT_SYSTEM_INCLUDE_DIRS}\n\
         CONVERT_SYSTEM_LIBRARIES = ${CONVERT_SYSTEM_LIBRARIES}")
 
     # Build library
-    add_library(${CONVERT_LIBRARY} SHARED
+    add_library(${PROJECT_NAME} SHARED
         ${CONVERT_SRC_FILES}
     )
 
     # Definitions
-    target_compile_definitions(${CONVERT_LIBRARY} PUBLIC ${CONVERT_DEFINITIONS})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ${CONVERT_DEFINITIONS})
 
     # Properties
-    set_target_properties(${CONVERT_LIBRARY} PROPERTIES
+    set_target_properties(${PROJECT_NAME} PROPERTIES
         CXX_STANDARD 20
     )
 
     # Compile options
-    target_compile_options(${CONVERT_LIBRARY} PRIVATE
+    target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Wpedantic -ftemplate-backtrace-limit=${TEMPLATE_BACKTRACE_LIMIT}
     )
 
     # Include directories
-    target_include_directories(${CONVERT_LIBRARY} PUBLIC
+    target_include_directories(${PROJECT_NAME} PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 
     # System include directories
-    target_include_directories(${CONVERT_LIBRARY} SYSTEM PUBLIC
+    target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
         ${CONVERT_SYSTEM_INCLUDE_DIRS}
     )
 
     # Link libraries
-    target_link_libraries(${CONVERT_LIBRARY} PUBLIC
+    target_link_libraries(${PROJECT_NAME} PUBLIC
         ${CONVERT_SYSTEM_LIBRARIES}
     )
 
@@ -220,16 +217,16 @@ if (CONVERT_SRC_FILES)
 
     # Installation
     install(
-        TARGETS ${CONVERT_LIBRARY}
-        EXPORT ${CONVERT_LIBRARY}
+        TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}
         PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
     install(
-        EXPORT ${CONVERT_LIBRARY}
-        DESTINATION ${CONVERT_LIBRARY}
+        EXPORT ${PROJECT_NAME}
+        DESTINATION ${PROJECT_NAME}
         FILE ${PROJECT_NAME}-export.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
     )
