@@ -30,6 +30,13 @@ if (BUILD_ROS_COMPONENTS)
     )
 endif()
 
+if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
+    # Append to source files
+    list(APPEND CONVERT_TEST_SRC_FILES
+        src/sensorbox_ros/imu.cpp
+    )
+endif()
+
 if (CONVERT_TEST_SRC_FILES)
     message(DEBUG "Building convert library tests as ${PROJECT_NAME}_tests with\n\
         CONVERT_TEST_SRC_FILES = ${CONVERT_TEST_SRC_FILES}\n\
@@ -37,7 +44,7 @@ if (CONVERT_TEST_SRC_FILES)
         CONVERT_TEST_SYSTEM_INCLUDE_DIRS = ${CONVERT_TEST_SYSTEM_INCLUDE_DIRS}\n\
         CONVERT_TEST_SYSTEM_LIBRARIES = ${CONVERT_TEST_SYSTEM_LIBRARIES}")
 
-    # Build Library
+    # Build tests
     add_executable(${PROJECT_NAME}_tests
         ${CONVERT_TEST_SRC_FILES}
     )
@@ -57,8 +64,8 @@ if (CONVERT_TEST_SRC_FILES)
 
     # Include Directories
     target_include_directories(${PROJECT_NAME}_tests PUBLIC
-        include
-        ../include
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     )
 
     # System Include Directories

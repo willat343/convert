@@ -19,6 +19,9 @@
 #if defined(CONVERT_ROS)
 #include "convert/ros/ros.hpp"
 #endif
+#if defined(CONVERT_ROS) && defined(CONVERT_SENSORBOX)
+#include "convert/sensorbox_ros/sensorbox_ros.hpp"
+#endif
 
 #include "convert/convert_helpers.hpp"
 

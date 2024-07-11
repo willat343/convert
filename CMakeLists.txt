@@ -21,12 +21,14 @@ find_package(Eigen3 3.3 QUIET)
 find_package(manif QUIET)
 find_package(Matlab QUIET)
 find_package(geometry_msgs QUIET)
+find_package(sensorbox QUIET)
 
 # Component Options
 option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ${Eigen3_FOUND})
 option(BUILD_MANIF_COMPONENTS "Build manif Components" ${manif_FOUND})
 option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ${Matlab_FOUND})
 option(BUILD_ROS_COMPONENTS "Build ROS Components" ${geometry_msgs_FOUND})
+option(BUILD_SENSORBOX_COMPONENTS "Build sensorbox Components" ${sensorbox_FOUND})
 
 # Template backtrace limit
 set(TEMPLATE_BACKTRACE_LIMIT "10" CACHE STRING "Template backtrace limit for compilation error verbosity. 0 to disable." FORCE)
@@ -61,6 +63,9 @@ if (BUILD_ROS_COMPONENTS)
     if (NOT DEFINED std_msgs_FOUND OR NOT ${std_msgs_FOUND})
         find_package(std_msgs REQUIRED)
     endif()
+endif()
+if (BUILD_SENSORBOX_COMPONENTS)
+    find_package(sensorbox REQUIRED)
 endif()
 
 set(CONVERT_SRC_FILES "")
@@ -178,12 +183,33 @@ if (BUILD_ROS_COMPONENTS)
     )
 endif()
 
+if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
+    # Append to source files
+    list(APPEND CONVERT_SRC_FILES
+        src/sensorbox_ros/imu.cpp
+    )
+
+    # Append to definitions
+    list(APPEND CONVERT_DEFINITIONS CONVERT_ROS CONVERT_SENSORBOX)
+
+    # Append to system include directories
+    list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
+        ${sensor_msgs_INCLUDE_DIRS}
+    )
+
+    # Append to system libraries
+    list(APPEND CONVERT_SYSTEM_LIBRARIES
+        sensorbox
+        ${sensor_msgs_LIBRARIES}
+    )
+endif()
+
 # Remove duplicates
 list(REMOVE_DUPLICATES CONVERT_DEFINITIONS)
 list(REMOVE_DUPLICATES CONVERT_SYSTEM_INCLUDE_DIRS)
 list(REMOVE_DUPLICATES CONVERT_SYSTEM_LIBRARIES)
 
-# Install directories
+# Installation directories
 include(GNUInstallDirs)
 
 # Compile of library and tests

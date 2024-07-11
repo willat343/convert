@@ -17,6 +17,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Vector3.h>
 #include <ros/ros.h>
+#include <sensor_msgs/Imu.h>
 #include <std_msgs/Header.h>
 #endif
 
@@ -73,6 +74,15 @@ template<>
 inline std::chrono::time_point<std::chrono::system_clock>
 random_instance<std::chrono::time_point<std::chrono::system_clock>>() {
     return std::chrono::time_point<std::chrono::system_clock>(std::chrono::nanoseconds(rand()));
+}
+
+template<>
+inline boost::array<double, 9UL> random_instance<boost::array<double, 9UL>>() {
+    boost::array<double, 9UL> instance;
+    for (std::size_t i = 0; i < 9UL; ++i) {
+        instance[i] = random_instance<double>();
+    }
+    return instance;
 }
 
 #ifdef CONVERT_EIGEN
@@ -148,6 +158,19 @@ inline geometry_msgs::Vector3 random_instance<geometry_msgs::Vector3>() {
     instance.x = random_instance<double>();
     instance.y = random_instance<double>();
     instance.z = random_instance<double>();
+    return instance;
+}
+
+template<>
+inline sensor_msgs::Imu random_instance<sensor_msgs::Imu>() {
+    sensor_msgs::Imu instance;
+    instance.header = random_instance<std_msgs::Header>();
+    instance.orientation = random_instance<geometry_msgs::Quaternion>();
+    instance.orientation_covariance = random_instance<boost::array<double, 9UL>>();
+    instance.angular_velocity = random_instance<geometry_msgs::Vector3>();
+    instance.angular_velocity_covariance = random_instance<boost::array<double, 9UL>>();
+    instance.linear_acceleration = random_instance<geometry_msgs::Vector3>();
+    instance.linear_acceleration_covariance = random_instance<boost::array<double, 9UL>>();
     return instance;
 }
 #endif

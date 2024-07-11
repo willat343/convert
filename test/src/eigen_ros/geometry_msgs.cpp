@@ -10,8 +10,7 @@ TEST(quaterniond_quaternion, to_from) {
     convert::test::test_to_from_eq<Eigen::Quaterniond>(geometry_msgs::Quaternion());
     auto instances = convert::test::test_instances<geometry_msgs::Quaternion, 100>();
     for (unsigned int i = 0; i < instances.size(); ++i) {
-        convert::test::check_approx(instances[i],
-                convert::to<geometry_msgs::Quaternion>(convert::to<Eigen::Quaterniond>(instances[i])));
+        convert::test::test_to_from_eq<Eigen::Quaterniond, geometry_msgs::Quaternion>(instances[i]);
     }
 }
 
