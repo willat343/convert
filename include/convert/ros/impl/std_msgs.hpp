@@ -14,6 +14,7 @@ void to(const std_msgs::Header& header, std::chrono::time_point<Clock, Duration>
 
 template<typename Clock, typename Duration>
 void to(const std::chrono::time_point<Clock, Duration>& tp, const std::string& frame_id, std_msgs::Header& header) {
+    header.seq = 0;
     to(tp, header.stamp);
     header.frame_id = frame_id;
 }

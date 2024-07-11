@@ -108,7 +108,7 @@ inline ros::Time random_instance<ros::Time>() {
 template<>
 inline std_msgs::Header random_instance<std_msgs::Header>() {
     std_msgs::Header instance;
-    instance.seq = random_instance<std::uint32_t>();
+    instance.seq = static_cast<std::uint32_t>(0);
     instance.stamp = random_instance<ros::Time>();
     const int frame_id_max_size = 10;
     const int frame_id_size = rand() % frame_id_max_size;

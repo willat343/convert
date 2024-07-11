@@ -25,6 +25,7 @@ void to(const Eigen::Matrix4d& matrix, geometry_msgs::Transform& msg) {
 }
 
 void to(const Eigen::Quaterniond& q, geometry_msgs::Quaternion& msg) {
+    // no q.normalize() to prevent obscuring real issues
     msg.w = q.w();
     msg.x = q.x();
     msg.y = q.y();
@@ -91,7 +92,7 @@ void to(const geometry_msgs::Quaternion& msg, Eigen::Quaterniond& q) {
     q.x() = msg.x;
     q.y() = msg.y;
     q.z() = msg.z;
-    q.normalize();
+    // no q.normalize() to prevent obscuring real issues
 }
 
 void to(const geometry_msgs::Transform& msg, Eigen::Isometry3d& transform) {

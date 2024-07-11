@@ -22,7 +22,7 @@ template<typename Clock, typename Duration = typename Clock::Duration>
 void to(const std_msgs::Header& header, std::chrono::time_point<Clock, Duration>& tp, std::string& frame_id);
 
 /**
- * @brief Convert time_point and frame id string to header. The sequence ID is not set.
+ * @brief Convert time_point and frame id string to header. The sequence ID is set to 0.
  * 
  * @tparam Clock 
  * @tparam Clock::Duration 
