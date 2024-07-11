@@ -72,12 +72,14 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_ROS_COMPONENTS)
     list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
         ${EIGEN3_INCLUDE_DIRS}
         ${geometry_msgs_INCLUDE_DIRS}
+        ${std_msgs_INCLUDE_DIRS}
     )
 
     # Append to system libraries
     list(APPEND CONVERT_SYSTEM_LIBRARIES
         Eigen3::Eigen
         ${geometry_msgs_LIBRARIES}
+        ${std_msgs_LIBRARIES}
     )
 endif()
 

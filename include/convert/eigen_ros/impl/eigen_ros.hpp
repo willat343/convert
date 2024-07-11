@@ -5,51 +5,22 @@
 
 namespace convert {
 
-template<typename ArrayScalar, int Rows, int Cols, typename MatrixScalar = ArrayScalar>
-void to(const boost::array<ArrayScalar, Rows * Cols>& msg, Eigen::Ref<Eigen::Matrix<MatrixScalar, Rows, Cols>> m) {
-    for (std::size_t r = 0; r < Rows; ++r) {
-        for (std::size_t c = 0; c < Cols; ++c) {
-            m(r, c) = msg[Cols * r + c];
+template<typename ArrayScalar, std::size_t Size, typename Derived>
+void to(const boost::array<ArrayScalar, Size>& msg, Eigen::MatrixBase<Derived>& m) {
+    static_assert(Derived::SizeAtCompileTime == Size, "conversion only supports fixed-size matrices of correct size");
+    for (int r = 0; r < Derived::RowsAtCompileTime; ++r) {
+        for (int c = 0; c < Derived::ColsAtCompileTime; ++c) {
+            m(r, c) = msg[Derived::ColsAtCompileTime * r + c];
         }
     }
 }
 
-template<typename MatrixScalar, int Rows, int Cols, typename ArrayScalar = MatrixScalar>
-void to(const Eigen::Ref<const Eigen::Matrix<MatrixScalar, Rows, Cols>> m,
-        boost::array<ArrayScalar, Rows * Cols>& msg) {
-    for (std::size_t r = 0; r < Rows; ++r) {
-        for (std::size_t c = 0; c < Cols; ++c) {
-            msg[Cols * r + c] = m(r, c);
-        }
-    }
-}
-
-template<typename VectorScalar, typename MatrixScalar = VectorScalar>
-void to(const std::vector<VectorScalar>& msg,
-        Eigen::Ref<Eigen::Matrix<MatrixScalar, Eigen::Dynamic, Eigen::Dynamic>> m) {
-    const std::size_t Rows = m.rows();
-    const std::size_t Cols = m.cols();
-    if (msg.size() != Rows * Cols) {
-        throw std::runtime_error("Failed to convert from ros vector to matrix. Vector size " +
-                                 std::to_string(msg.size()) + " != " + std::to_string(Rows) + "*" +
-                                 std::to_string(Cols) + " (Rows*Cols). Were the matrix dimensions set correctly?");
-    }
-    for (std::size_t r = 0; r < Rows; ++r) {
-        for (std::size_t c = 0; c < Cols; ++c) {
-            m(r, c) = msg[Cols * r + c];
-        }
-    }
-}
-
-template<typename MatrixScalar, typename VectorScalar = MatrixScalar>
-void to(const Eigen::Ref<const Eigen::Matrix<MatrixScalar, Eigen::Dynamic, Eigen::Dynamic>> m,
-        std::vector<VectorScalar>& msg) {
-    const std::size_t Rows = m.rows();
-    const std::size_t Cols = m.cols();
-    msg.resize(Rows * Cols);
-    for (std::size_t r = 0; r < Rows; ++r) {
-        for (std::size_t c = 0; c < Cols; ++c) {
-            msg[Cols * r + c] = m(r, c);
+template<typename ArrayScalar, std::size_t Size, typename Derived>
+void to(const Eigen::MatrixBase<Derived>& m, boost::array<ArrayScalar, Size>& msg) {
+    static_assert(Derived::SizeAtCompileTime == Size, "conversion only supports fixed-size matrices of correct size");
+    for (int r = 0; r < Derived::RowsAtCompileTime; ++r) {
+        for (int c = 0; c < Derived::ColsAtCompileTime; ++c) {
+            msg[Derived::ColsAtCompileTime * r + c] = m(r, c);
         }
     }
 }
