@@ -52,12 +52,36 @@ if (BUILD_ROS_COMPONENTS)
     if (NOT DEFINED geometry_msgs_FOUND OR NOT ${geometry_msgs_FOUND})
         find_package(geometry_msgs REQUIRED)
     endif()
+    if (NOT DEFINED nav_msgs_FOUND OR NOT ${nav_msgs_FOUND})
+        find_package(nav_msgs REQUIRED)
+    endif()
+    if (NOT DEFINED sensor_msgs_FOUND OR NOT ${sensor_msgs_FOUND})
+        find_package(sensor_msgs REQUIRED)
+    endif()
+    if (NOT DEFINED std_msgs_FOUND OR NOT ${std_msgs_FOUND})
+        find_package(std_msgs REQUIRED)
+    endif()
 endif()
 
 set(CONVERT_SRC_FILES "")
 set(CONVERT_DEFINITIONS "")
 set(CONVERT_SYSTEM_INCLUDE_DIRS "")
 set(CONVERT_SYSTEM_LIBRARIES "")
+
+if (BUILD_EIGEN_COMPONENTS)
+    # Append to definitions
+    list(APPEND CONVERT_DEFINITIONS CONVERT_EIGEN)
+
+    # Append to system include directories
+    list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
+        ${EIGEN3_INCLUDE_DIRS}
+    )
+
+    # Append to system libraries
+    list(APPEND CONVERT_SYSTEM_LIBRARIES
+        Eigen3::Eigen
+    )
+endif()
 
 if (BUILD_EIGEN_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
@@ -143,17 +167,21 @@ if (BUILD_ROS_COMPONENTS)
     list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
         ${geometry_msgs_INCLUDE_DIRS}
         ${nav_msgs_INCLUDE_DIRS}
+        ${std_msgs_INCLUDE_DIRS}
     )
 
     # Append to system libraries
     list(APPEND CONVERT_SYSTEM_LIBRARIES
         ${geometry_msgs_LIBRARIES}
         ${nav_msgs_LIBRARIES}
+        ${std_msgs_LIBRARIES}
     )
 endif()
 
-# Remove duplicates from definitions
+# Remove duplicates
 list(REMOVE_DUPLICATES CONVERT_DEFINITIONS)
+list(REMOVE_DUPLICATES CONVERT_SYSTEM_INCLUDE_DIRS)
+list(REMOVE_DUPLICATES CONVERT_SYSTEM_LIBRARIES)
 
 # Install directories
 include(GNUInstallDirs)

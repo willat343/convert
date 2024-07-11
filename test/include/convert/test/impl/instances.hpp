@@ -17,9 +17,12 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Vector3.h>
 #include <ros/ros.h>
+#include <std_msgs/Header.h>
 #endif
 
+#include <chrono>
 #include <cstdlib>
+#include <string>
 
 #include "convert/test/instances.hpp"
 
@@ -55,6 +58,23 @@ inline double random_instance<double>() {
     return 2.0 * static_cast<double>(rand()) / static_cast<double>(RAND_MAX) - 1.0;
 }
 
+template<>
+inline std::uint32_t random_instance<std::uint32_t>() {
+    return static_cast<std::uint32_t>(rand());
+}
+
+template<>
+inline std::chrono::time_point<std::chrono::steady_clock>
+random_instance<std::chrono::time_point<std::chrono::steady_clock>>() {
+    return std::chrono::time_point<std::chrono::steady_clock>(std::chrono::nanoseconds(rand()));
+}
+
+template<>
+inline std::chrono::time_point<std::chrono::system_clock>
+random_instance<std::chrono::time_point<std::chrono::system_clock>>() {
+    return std::chrono::time_point<std::chrono::system_clock>(std::chrono::nanoseconds(rand()));
+}
+
 #ifdef CONVERT_EIGEN
 template<>
 inline Eigen::Vector3d random_instance<Eigen::Vector3d>() {
@@ -80,6 +100,24 @@ inline manif::R3d random_instance<manif::R3d>() {
 #endif
 
 #ifdef CONVERT_ROS
+template<>
+inline ros::Time random_instance<ros::Time>() {
+    return ros::Time(random_instance<std::uint32_t>(), random_instance<std::uint32_t>());
+}
+
+template<>
+inline std_msgs::Header random_instance<std_msgs::Header>() {
+    std_msgs::Header instance;
+    instance.seq = random_instance<std::uint32_t>();
+    instance.stamp = random_instance<ros::Time>();
+    const int frame_id_max_size = 10;
+    const int frame_id_size = rand() % frame_id_max_size;
+    for (int i = 0; i < frame_id_size; ++i) {
+        instance.frame_id += std::to_string(static_cast<char>(rand() % 128)); // ASCII table has 128 characters
+    }
+    return instance;
+}
+
 template<>
 inline geometry_msgs::Point random_instance<geometry_msgs::Point>() {
     geometry_msgs::Point instance;

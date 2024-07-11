@@ -22,6 +22,14 @@ if (BUILD_MANIF_COMPONENTS AND BUILD_ROS_COMPONENTS)
     )
 endif()
 
+if (BUILD_ROS_COMPONENTS)
+    # Append to source files
+    list(APPEND CONVERT_TEST_SRC_FILES
+        src/ros/rostime.cpp
+        src/ros/std_msgs.cpp
+    )
+endif()
+
 if (CONVERT_TEST_SRC_FILES)
     message(DEBUG "Building convert library tests as ${PROJECT_NAME}_tests with\n\
         CONVERT_TEST_SRC_FILES = ${CONVERT_TEST_SRC_FILES}\n\
