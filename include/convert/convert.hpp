@@ -13,6 +13,9 @@
 #if defined(CONVERT_EIGEN) && defined(CONVERT_MATLAB)
 #include "convert/eigen_matlab/eigen_matlab.hpp"
 #endif
+#if defined(CONVERT_GTSAM) && defined(CONVERT_ROS)
+#include "convert/gtsam_ros/gtsam_ros.hpp"
+#endif
 #if defined(CONVERT_MANIF) && defined(CONVERT_ROS)
 #include "convert/manif_ros/manif_ros.hpp"
 #endif

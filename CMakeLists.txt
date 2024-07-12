@@ -140,6 +140,31 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_ROS_COMPONENTS)
     )
 endif()
 
+if (BUILD_GTSAM_COMPONENTS AND BUILD_ROS_COMPONENTS)
+    # Append to source files
+    list(APPEND CONVERT_SRC_FILES
+        src/gtsam_ros/geometry_geometry_msgs.cpp
+        src/gtsam_ros/navigation_nav_msgs.cpp
+    )
+
+    # Append to definitions
+    list(APPEND CONVERT_DEFINITIONS CONVERT_GTSAM CONVERT_ROS)
+
+    # Append to system include directories
+    list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
+        ${GTSAM_INCLUDE_DIR}
+        ${geometry_msgs_INCLUDE_DIRS}
+        ${nav_msgs_INCLUDE_DIRS}
+    )
+
+    # Append to system libraries
+    list(APPEND CONVERT_SYSTEM_LIBRARIES
+        gtsam
+        ${geometry_msgs_LIBRARIES}
+        ${nav_msgs_LIBRARIES}
+    )
+endif()
+
 if (BUILD_MATLAB_COMPONENTS)
     # Append to system include directories
     list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
