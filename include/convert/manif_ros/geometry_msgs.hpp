@@ -1,5 +1,5 @@
-#ifndef CONVERT_MANIF_ROS_GEOMETRY_MSGS
-#define CONVERT_MANIF_ROS_GEOMETRY_MSGS
+#ifndef CONVERT_MANIF_ROS_GEOMETRY_MSGS_HPP
+#define CONVERT_MANIF_ROS_GEOMETRY_MSGS_HPP
 
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Pose.h>

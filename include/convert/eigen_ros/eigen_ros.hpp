@@ -1,5 +1,5 @@
-#ifndef CONVERT_EIGEN_ROS_HPP
-#define CONVERT_EIGEN_ROS_HPP
+#ifndef CONVERT_EIGEN_ROS_EIGEN_ROS_HPP
+#define CONVERT_EIGEN_ROS_EIGEN_ROS_HPP
 
 #include <ros/ros.h>
 

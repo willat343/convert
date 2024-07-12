@@ -1,5 +1,5 @@
-#ifndef CONVERT_MANIF_ROS_HPP
-#define CONVERT_MANIF_ROS_HPP
+#ifndef CONVERT_MANIF_ROS_MANIF_ROS_HPP
+#define CONVERT_MANIF_ROS_MANIF_ROS_HPP
 
 #include <manif/manif.h>
 
