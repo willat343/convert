@@ -18,6 +18,7 @@ option(BUILD_TESTS "Build Tests" OFF)
 
 # Find packages quietly to set defaults
 find_package(Eigen3 3.3 QUIET)
+find_package(GTSAM QUIET)
 find_package(manif QUIET)
 find_package(Matlab QUIET)
 find_package(geometry_msgs QUIET)
@@ -25,6 +26,7 @@ find_package(sensorbox QUIET)
 
 # Component Options
 option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ${Eigen3_FOUND})
+option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" ${GTSAM_FOUND})
 option(BUILD_MANIF_COMPONENTS "Build manif Components" ${manif_FOUND})
 option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ${Matlab_FOUND})
 option(BUILD_ROS_COMPONENTS "Build ROS Components" ${geometry_msgs_FOUND})
@@ -43,6 +45,9 @@ endif()
 # Find required pacakges for enabled components
 if (BUILD_EIGEN_COMPONENTS AND (NOT DEFINED Eigen3_FOUND OR NOT ${Eigen3_FOUND}))
     find_package(Eigen3 3.3 REQUIRED)
+endif()
+if (BUILD_GTSAM_COMPONENTS AND (NOT DEFINED GTSAM_FOUND OR NOT ${GTSAM_FOUND}))
+    find_package(GTSAM REQUIRED)
 endif()
 if (BUILD_MANIF_COMPONENTS AND (NOT DEFINED manif_FOUND OR NOT ${manif_FOUND}))
     find_package(manif REQUIRED)
@@ -85,6 +90,29 @@ if (BUILD_EIGEN_COMPONENTS)
     # Append to system libraries
     list(APPEND CONVERT_SYSTEM_LIBRARIES
         Eigen3::Eigen
+    )
+endif()
+
+if (BUILD_EIGEN_COMPONENTS AND BUILD_GTSAM_COMPONENTS)
+    # Append to source files
+    list(APPEND CONVERT_SRC_FILES
+        src/eigen_gtsam/geometry.cpp
+        src/eigen_gtsam/navigation.cpp
+    )
+
+    # Append to definitions
+    list(APPEND CONVERT_DEFINITIONS CONVERT_EIGEN CONVERT_GTSAM)
+
+    # Append to system include directories
+    list(APPEND CONVERT_SYSTEM_INCLUDE_DIRS
+        ${EIGEN3_INCLUDE_DIRS}
+        ${GTSAM_INCLUDE_DIR}
+    )
+
+    # Append to system libraries
+    list(APPEND CONVERT_SYSTEM_LIBRARIES
+        Eigen3::Eigen
+        gtsam
     )
 endif()
 
