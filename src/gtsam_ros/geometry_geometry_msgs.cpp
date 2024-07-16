@@ -15,6 +15,10 @@ void to(const geometry_msgs::Quaternion& msg, gtsam::Rot3& r) {
     r = gtsam::Rot3{q};
 }
 
-
+void to(const geometry_msgs::Transform& msg, gtsam::Pose3& pose) {
+    Eigen::Matrix4d p;
+    to(msg, p);
+    pose = gtsam::Pose3{p};
+}
 
 }
