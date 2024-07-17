@@ -39,6 +39,8 @@ void to(const geometry_msgs::Point& msg, Eigen::Translation3d& v);
 
 void to(const geometry_msgs::Pose& msg, Eigen::Ref<Eigen::Matrix4d> matrix);
 
+void to(const geometry_msgs::Pose& msg, Eigen::Isometry3d& transform);
+
 void to(const geometry_msgs::Quaternion& msg, Eigen::Ref<Eigen::Matrix3d> matrix);
 
 void to(const geometry_msgs::Quaternion& msg, Eigen::Quaterniond& q);

@@ -1,5 +1,6 @@
 #include "convert/eigen_ros/geometry_msgs.hpp"
 
+#include "convert/eigen/geometry.hpp"
 #include "convert/eigen_ros/eigen_ros.hpp"
 
 namespace convert {
@@ -72,6 +73,14 @@ void to(const geometry_msgs::Point& msg, Eigen::Translation3d& v) {
     v.x() = msg.x;
     v.y() = msg.y;
     v.z() = msg.z;
+}
+
+void to(const geometry_msgs::Pose& msg, Eigen::Isometry3d& transform) {
+    Eigen::Vector3d p;
+    to(msg.position, p);
+    Eigen::Quaterniond q;
+    to(msg.orientation, q);
+    to(p, q, transform);
 }
 
 void to(const geometry_msgs::Pose& msg, Eigen::Ref<Eigen::Matrix4d> matrix) {
