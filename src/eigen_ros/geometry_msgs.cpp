@@ -5,6 +5,11 @@
 
 namespace convert {
 
+void to(const Eigen::Isometry3d& transform, geometry_msgs::Pose& msg) {
+    to(transform.translation(), msg.position);
+    to(Eigen::Quaterniond(transform.rotation()), msg.orientation);
+}
+
 void to(const Eigen::Isometry3d& transform, geometry_msgs::Transform& msg) {
     to(transform.translation(), msg.translation);
     to(Eigen::Quaterniond(transform.rotation()), msg.rotation);

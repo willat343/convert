@@ -13,6 +13,8 @@
 
 namespace convert {
 
+void to(const Eigen::Isometry3d& transform, geometry_msgs::Pose& msg);
+
 void to(const Eigen::Isometry3d& transform, geometry_msgs::Transform& msg);
 
 void to(const Eigen::Matrix3d& matrix, geometry_msgs::Quaternion& msg);
@@ -37,9 +39,9 @@ void to(const geometry_msgs::Point& msg, Eigen::Ref<Eigen::Vector3d> v);
 
 void to(const geometry_msgs::Point& msg, Eigen::Translation3d& v);
 
-void to(const geometry_msgs::Pose& msg, Eigen::Ref<Eigen::Matrix4d> matrix);
-
 void to(const geometry_msgs::Pose& msg, Eigen::Isometry3d& transform);
+
+void to(const geometry_msgs::Pose& msg, Eigen::Ref<Eigen::Matrix4d> matrix);
 
 void to(const geometry_msgs::Quaternion& msg, Eigen::Ref<Eigen::Matrix3d> matrix);
 
