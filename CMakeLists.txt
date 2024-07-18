@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12) # 3.12 required for: add_compile_definitions
 project(convert
-    VERSION 1.0
+    VERSION 0.1.0
     DESCRIPTION "Conversion Library"
     LANGUAGES CXX
 )
