@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12) # 3.12 required for: add_compile_definitions
 project(convert
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "Conversion Library"
     LANGUAGES CXX
 )
@@ -52,7 +52,7 @@ endif()
 if (BUILD_MANIF_COMPONENTS AND (NOT DEFINED manif_FOUND OR NOT ${manif_FOUND}))
     find_package(manif REQUIRED)
 endif()
-if (BUILD_MATLAB_COMPONENTS)
+if (BUILD_MATLAB_COMPONENTS AND (NOT DEFINED Matlab_FOUND OR NOT ${Matlab_FOUND}))
     find_package(Matlab REQUIRED MEX_COMPILER)
 endif()
 if (BUILD_ROS_COMPONENTS)
@@ -69,9 +69,18 @@ if (BUILD_ROS_COMPONENTS)
         find_package(std_msgs REQUIRED)
     endif()
 endif()
-if (BUILD_SENSORBOX_COMPONENTS)
+if (BUILD_SENSORBOX_COMPONENTS AND (NOT DEFINED sensorbox_FOUND OR NOT ${sensorbox_FOUND}))
     find_package(sensorbox REQUIRED)
 endif()
+
+# Report components that will be built
+message(NOTICE "Components to be built:")
+message(NOTICE "\t    EIGEN = ${BUILD_EIGEN_COMPONENTS}")
+message(NOTICE "\t    GTSAM = ${BUILD_GTSAM_COMPONENTS}")
+message(NOTICE "\t    MANIF = ${BUILD_MANIF_COMPONENTS}")
+message(NOTICE "\t   MATLAB = ${BUILD_MATLAB_COMPONENTS}")
+message(NOTICE "\t      ROS = ${BUILD_ROS_COMPONENTS}")
+message(NOTICE "\tSENSORBOX = ${BUILD_SENSORBOX_COMPONENTS}")
 
 set(CONVERT_SRC_FILES "")
 set(CONVERT_DEFINITIONS "")
@@ -319,7 +328,7 @@ if (CONVERT_SRC_FILES)
         VERSION ${PROJECT_VERSION}
         COMPATIBILITY AnyNewerVersion
     )
-    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in
+    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
         INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
     )
