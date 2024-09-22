@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>convert_catkin</name>
+    <version>0.2.0</version>
+    <description>convert_catkin</description>
+
+    <maintainer email="william.talbot97@gmail.com">William Talbot</maintainer>
+    <license>BSD-3_Clause</license>
+    <author email="william.talbot97@gmail.com">William Talbot</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>sensorbox_catkin</build_depend>
+    <exec_depend>sensorbox_catkin</exec_depend>
+</package>

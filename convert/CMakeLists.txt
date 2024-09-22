@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12) # 3.12 required for: add_compile_definitions
 project(convert
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "Conversion Library"
     LANGUAGES CXX
 )
@@ -72,6 +72,15 @@ endif()
 if (BUILD_SENSORBOX_COMPONENTS)
     find_package(sensorbox REQUIRED)
 endif()
+
+# Report components that will be built
+message(NOTICE "Components to be built:")
+message(NOTICE "\t    EIGEN = ${BUILD_EIGEN_COMPONENTS}")
+message(NOTICE "\t    GTSAM = ${BUILD_GTSAM_COMPONENTS}")
+message(NOTICE "\t    MANIF = ${BUILD_MANIF_COMPONENTS}")
+message(NOTICE "\t   MATLAB = ${BUILD_MATLAB_COMPONENTS}")
+message(NOTICE "\t      ROS = ${BUILD_ROS_COMPONENTS}")
+message(NOTICE "\tSENSORBOX = ${BUILD_SENSORBOX_COMPONENTS}")
 
 set(CONVERT_SRC_FILES "")
 set(CONVERT_DEFINITIONS "")
