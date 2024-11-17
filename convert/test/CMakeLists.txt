@@ -1,8 +1,8 @@
-set(CONVERT_TEST_SRC_FILES "")
-set(CONVERT_TEST_DEFINITIONS ${CONVERT_DEFINITIONS})
-set(CONVERT_TEST_SYSTEM_INCLUDE_DIRS ${CONVERT_SYSTEM_INCLUDE_DIRS})
-set(CONVERT_TEST_SYSTEM_LIBRARIES
-    ${CONVERT_SYSTEM_LIBRARIES}
+set(convert_TEST_SRC_FILES "")
+set(convert_TEST_DEFINITIONS ${convert_DEFINITIONS})
+set(convert_TEST_SYSTEM_INCLUDE_DIRS ${convert_SYSTEM_INCLUDE_DIRS})
+set(convert_TEST_SYSTEM_LIBRARIES
+    ${convert_SYSTEM_LIBRARIES}
     gtest_main
     gtest
     pthread
@@ -10,21 +10,21 @@ set(CONVERT_TEST_SYSTEM_LIBRARIES
 
 if (BUILD_EIGEN_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
-    list(APPEND CONVERT_TEST_SRC_FILES
+    list(APPEND convert_TEST_SRC_FILES
         src/eigen_ros/geometry_msgs.cpp
     )
 endif()
 
 if (BUILD_MANIF_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
-    list(APPEND CONVERT_TEST_SRC_FILES
+    list(APPEND convert_TEST_SRC_FILES
         src/manif_ros/geometry_msgs.cpp
     )
 endif()
 
 if (BUILD_ROS_COMPONENTS)
     # Append to source files
-    list(APPEND CONVERT_TEST_SRC_FILES
+    list(APPEND convert_TEST_SRC_FILES
         src/ros/rostime.cpp
         src/ros/std_msgs.cpp
     )
@@ -32,25 +32,31 @@ endif()
 
 if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
-    list(APPEND CONVERT_TEST_SRC_FILES
+    list(APPEND convert_TEST_SRC_FILES
         src/sensorbox_ros/imu.cpp
     )
 endif()
 
-if (CONVERT_TEST_SRC_FILES)
+if (convert_TEST_SRC_FILES)
     message(DEBUG "Building convert library tests as ${PROJECT_NAME}_tests with\n\
-        CONVERT_TEST_SRC_FILES = ${CONVERT_TEST_SRC_FILES}\n\
-        CONVERT_TEST_DEFINITIONS = ${CONVERT_TEST_DEFINITIONS}\n\
-        CONVERT_TEST_SYSTEM_INCLUDE_DIRS = ${CONVERT_TEST_SYSTEM_INCLUDE_DIRS}\n\
-        CONVERT_TEST_SYSTEM_LIBRARIES = ${CONVERT_TEST_SYSTEM_LIBRARIES}")
+        convert_TEST_SRC_FILES = ${convert_TEST_SRC_FILES}\n\
+        convert_TEST_DEFINITIONS = ${convert_TEST_DEFINITIONS}\n\
+        convert_TEST_SYSTEM_INCLUDE_DIRS = ${convert_TEST_SYSTEM_INCLUDE_DIRS}\n\
+        convert_TEST_SYSTEM_LIBRARIES = ${convert_TEST_SYSTEM_LIBRARIES}")
 
     # Build tests
     add_executable(${PROJECT_NAME}_tests
-        ${CONVERT_TEST_SRC_FILES}
+        ${convert_TEST_SRC_FILES}
+    )
+
+    # Link Libraries
+    target_link_libraries(${PROJECT_NAME}_tests PUBLIC
+        ${PROJECT_NAME}
+        ${convert_TEST_SYSTEM_LIBRARIES}
     )
 
     # Definitions
-    target_compile_definitions(${PROJECT_NAME}_tests PUBLIC ${CONVERT_TEST_DEFINITIONS})
+    target_compile_definitions(${PROJECT_NAME}_tests PUBLIC ${convert_TEST_DEFINITIONS})
 
     # Properties
     set_target_properties(${PROJECT_NAME}_tests PROPERTIES
@@ -77,13 +83,7 @@ if (CONVERT_TEST_SRC_FILES)
 
     # System Include Directories
     target_include_directories(${PROJECT_NAME}_tests SYSTEM PUBLIC
-        ${CONVERT_TEST_SYSTEM_INCLUDE_DIRS}
-    )
-
-    # Link Libraries
-    target_link_libraries(${PROJECT_NAME}_tests PUBLIC
-        convert
-        ${CONVERT_TEST_SYSTEM_LIBRARIES}
+        ${convert_TEST_SYSTEM_INCLUDE_DIRS}
     )
 
     # Enable ctest

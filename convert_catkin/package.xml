@@ -10,6 +10,5 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <build_depend>sensorbox_catkin</build_depend>
     <exec_depend>sensorbox_catkin</exec_depend>
 </package>
