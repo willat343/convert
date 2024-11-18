@@ -33,6 +33,11 @@ if (convert_SRC_FILES)
         ${convert_SRC_FILES}
     )
 
+    # Link libraries
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+        ${convert_SYSTEM_LIBRARIES}
+    )
+
     # Definitions
     target_compile_definitions(${PROJECT_NAME} PUBLIC ${convert_DEFINITIONS})
 
@@ -55,11 +60,6 @@ if (convert_SRC_FILES)
     # System include directories
     target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
         ${convert_SYSTEM_INCLUDE_DIRS}
-    )
-
-    # Link libraries
-    target_link_libraries(${PROJECT_NAME} PUBLIC
-        ${convert_SYSTEM_LIBRARIES}
     )
 
     # Build tests
