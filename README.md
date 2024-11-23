@@ -82,7 +82,7 @@ For more explicit output, the test executables can be run directly from the buil
 
 ## Catkin Support
 
-A catkin wrapper is available to facilitate an isolated installation within a catkin workspace (e.g. for ROS applications).
+A `package.xml` is supplied to facilitate an isolated installation within a catkin workspace (e.g. for ROS applications).
 
 ### Prerequisites
 
@@ -101,23 +101,23 @@ ln -s /path/to/convert /path/to/catkin_ws/src
 
 ```bash
 cd /path/to/catkin_ws
-catkin build convert_catkin
+catkin build convert
 ```
 
 ### Uninstallation
 
 ```bash
 cd /path/to/catkin_ws
-catkin clean convert_catkin
+catkin clean convert
 ```
 
 ### Usage
 
 To use the package in a downstream project, one should add to their `package.xml`:
 ```xml
-<exec_depend>convert_catkin</exec_depend>
+<depend>convert</depend>
 ```
-One can then either use the workspace's isolated installation if the catkin wrapper exists in the workspace, or use the system installation otherwise.
+One can then either use the workspace's isolated installation or use the system installation otherwise.
 Importing the dependency is then exactly the same as it would be in a non-catkin package as described above (do NOT rely on the `catkin` variables like `catkin_LIBRARIES` and `catkin_INCLUDE_DIRS`).
 
 ### Documentation
