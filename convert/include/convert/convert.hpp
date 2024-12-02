@@ -3,6 +3,7 @@
 
 #if defined(CONVERT_EIGEN)
 #include "convert/eigen/eigen.hpp"
+#include "convert/eigen_std/eigen_std.hpp"
 #endif
 #if defined(CONVERT_EIGEN) && defined(CONVERT_GTSAM)
 #include "convert/eigen_gtsam/eigen_gtsam.hpp"
