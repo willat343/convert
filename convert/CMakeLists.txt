@@ -132,6 +132,8 @@ if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
     list(APPEND convert_SRC_FILES
         src/sensorbox_ros/imu.cpp
+        src/sensorbox_ros/pose_twist.cpp
+        src/sensorbox_ros/pose.cpp
     )
 
     # Append to definitions

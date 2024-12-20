@@ -7,9 +7,9 @@
 
 namespace convert {
 
-void to(const sensor_msgs::Imu& msg, sensorbox::Imu& imu);
+void to(const sensor_msgs::Imu& msg, sensorbox::ImuMeasurement<3>& imu);
 
-void to(const sensorbox::Imu& imu, sensor_msgs::Imu& msg);
+void to(const sensorbox::ImuMeasurement<3>& imu, sensor_msgs::Imu& msg);
 
 }
 
