@@ -19,6 +19,14 @@ inline ToType to(const From1Type& from1, const From2Type& from2) {
     return out;
 }
 
+template<typename ToType, typename FromType>
+std::vector<ToType> to(const std::vector<FromType>& from) {
+    std::vector<ToType> out(from.size());
+    std::transform(from.cbegin(), from.cend(), out.begin(),
+            [](const FromType& from_element) { return convert::to<ToType>(from_element); });
+    return out;
+}
+
 }
 
 #endif

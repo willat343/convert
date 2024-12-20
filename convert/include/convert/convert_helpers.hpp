@@ -1,6 +1,8 @@
 #ifndef CONVERT_CONVERT_HELPERS_HPP
 #define CONVERT_CONVERT_HELPERS_HPP
 
+#include <vector>
+
 namespace convert {
 
 /**
@@ -34,6 +36,19 @@ ToType to(const FromType& from);
  */
 template<typename ToType, typename From1Type, typename From2Type>
 ToType to(const From1Type& from1, const From2Type& from2);
+
+/**
+ * @brief Convenience function to perform a conversion of a vector of FromType objects to ToType objects.
+ *
+ * Requires function `void to(const FromType&, ToType&);` to be defined and `ToType` to be default-constructable.
+ *
+ * @tparam ToType
+ * @tparam FromType
+ * @param from
+ * @return std::vector<ToType>
+ */
+template<typename ToType, typename FromType>
+std::vector<ToType> to(const std::vector<FromType>& from);
 
 }
 
