@@ -1,4 +1,5 @@
 #include "convert/eigen_gtsam/geometry.hpp"
+
 #include "convert/eigen/geometry.hpp"
 
 namespace convert {

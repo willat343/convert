@@ -1,4 +1,5 @@
 #include "convert/eigen_gtsam/navigation.hpp"
+
 #include "convert/eigen_gtsam/geometry.hpp"
 
 namespace convert {

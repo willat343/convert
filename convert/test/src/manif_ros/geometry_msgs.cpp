@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
+#include "convert/test/geometry_msgs.hpp"
 #include "convert/test/helpers.hpp"
 #include "convert/test/instances.hpp"
-#include "convert/test/geometry_msgs.hpp"
 
 TEST(point_R3d, to_from) {
     convert::test::test_to_from_eq<geometry_msgs::Point, manif::R3d>(manif::R3d());

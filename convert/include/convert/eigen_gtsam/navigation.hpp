@@ -2,6 +2,7 @@
 #define CONVERT_EIGEN_GTSAM_NAVIGATION_HPP
 
 #include <gtsam/navigation/NavState.h>
+
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 

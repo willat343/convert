@@ -31,12 +31,12 @@ void to(const Eigen::AngleAxis<Scalar>& aa, Eigen::Matrix<Scalar, 3, 1>& v);
 
 /**
  * @brief Convert translation and quaternion to transform.
- * 
- * @tparam Scalar 
- * @tparam D 
- * @param t 
- * @param q 
- * @param T 
+ *
+ * @tparam Scalar
+ * @tparam D
+ * @param t
+ * @param q
+ * @param T
  */
 template<typename Scalar, int D>
 void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Quaternion<Scalar>& q,
@@ -44,12 +44,12 @@ void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Quaternion<Scalar>&
 
 /**
  * @brief Convert translation vector and quaternion to transform.
- * 
- * @tparam Scalar 
- * @tparam D 
- * @param t 
- * @param q 
- * @param T 
+ *
+ * @tparam Scalar
+ * @tparam D
+ * @param t
+ * @param q
+ * @param T
  */
 template<typename Scalar, int D>
 void to(const Eigen::Matrix<Scalar, D, 1>& t, const Eigen::Quaternion<Scalar>& q,
@@ -57,12 +57,12 @@ void to(const Eigen::Matrix<Scalar, D, 1>& t, const Eigen::Quaternion<Scalar>& q
 
 /**
  * @brief Convert translation and rotation matrix to transform.
- * 
- * @tparam Scalar 
- * @tparam D 
- * @param t 
- * @param R 
- * @param T 
+ *
+ * @tparam Scalar
+ * @tparam D
+ * @param t
+ * @param R
+ * @param T
  */
 template<typename Scalar, int D>
 void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Matrix<Scalar, D, D>& R,
@@ -70,12 +70,12 @@ void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Matrix<Scalar, D, D
 
 /**
  * @brief Convert translation vector and rotation matrix to transform.
- * 
- * @tparam Scalar 
- * @tparam D 
- * @param t 
- * @param R 
- * @param T 
+ *
+ * @tparam Scalar
+ * @tparam D
+ * @param t
+ * @param R
+ * @param T
  */
 template<typename Scalar, int D>
 void to(const Eigen::Matrix<Scalar, D, 1>& t, const Eigen::Matrix<Scalar, D, D>& R,

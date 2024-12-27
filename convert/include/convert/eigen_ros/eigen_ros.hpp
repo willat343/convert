@@ -13,24 +13,24 @@ namespace convert {
 
 /**
  * @brief Convert a boost::array to an Eigen::Matrix.
- * 
- * @tparam ArrayScalar 
- * @tparam Size 
- * @tparam Derived 
- * @param msg 
- * @param m 
+ *
+ * @tparam ArrayScalar
+ * @tparam Size
+ * @tparam Derived
+ * @param msg
+ * @param m
  */
 template<typename ArrayScalar, std::size_t Size, typename Derived>
 void to(const boost::array<ArrayScalar, Size>& msg, Eigen::MatrixBase<Derived>& m);
 
 /**
  * @brief Convert an Eigen::Matrix to a boost::array.
- * 
- * @tparam ArrayScalar 
- * @tparam Size 
- * @tparam Derived 
- * @param m 
- * @param msg 
+ *
+ * @tparam ArrayScalar
+ * @tparam Size
+ * @tparam Derived
+ * @param m
+ * @param msg
  */
 template<typename ArrayScalar, std::size_t Size, typename Derived>
 void to(const Eigen::MatrixBase<Derived>& m, boost::array<ArrayScalar, Size>& msg);

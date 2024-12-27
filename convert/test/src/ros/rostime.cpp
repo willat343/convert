@@ -1,7 +1,6 @@
-#include "convert/ros/ros.hpp"
-
 #include <gtest/gtest.h>
 
+#include "convert/ros/ros.hpp"
 #include "convert/test/helpers.hpp"
 #include "convert/test/instances.hpp"
 

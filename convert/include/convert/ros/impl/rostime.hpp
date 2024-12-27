@@ -15,7 +15,8 @@ void to(const std::chrono::time_point<Clock, Duration>& tp, ros::Time& t) {
     // duration_cast always rounds down
     t.sec = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
     t.nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(
-            tp - std::chrono::time_point<Clock, Duration>(std::chrono::seconds(t.sec))).count();
+            tp - std::chrono::time_point<Clock, Duration>(std::chrono::seconds(t.sec)))
+                     .count();
 }
 
 }

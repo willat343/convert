@@ -2,6 +2,7 @@
 #define CONVERT_EIGEN_GTSAM_GEOMETRY_HPP
 
 #include <gtsam/geometry/Pose3.h>
+
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 

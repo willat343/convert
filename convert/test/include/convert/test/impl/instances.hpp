@@ -123,7 +123,7 @@ inline std_msgs::Header random_instance<std_msgs::Header>() {
     const int frame_id_max_size = 10;
     const int frame_id_size = rand() % frame_id_max_size;
     for (int i = 0; i < frame_id_size; ++i) {
-        instance.frame_id += std::to_string(static_cast<char>(rand() % 128)); // ASCII table has 128 characters
+        instance.frame_id += std::to_string(static_cast<char>(rand() % 128));  // ASCII table has 128 characters
     }
     return instance;
 }
