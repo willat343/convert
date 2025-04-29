@@ -49,12 +49,6 @@ if (convert_TEST_SRC_FILES)
         ${convert_TEST_SRC_FILES}
     )
 
-    # Link Libraries
-    target_link_libraries(${PROJECT_NAME}_tests PUBLIC
-        ${PROJECT_NAME}
-        ${convert_TEST_SYSTEM_LIBRARIES}
-    )
-
     # Definitions
     target_compile_definitions(${PROJECT_NAME}_tests PUBLIC ${convert_TEST_DEFINITIONS})
 
@@ -84,6 +78,12 @@ if (convert_TEST_SRC_FILES)
     # System Include Directories
     target_include_directories(${PROJECT_NAME}_tests SYSTEM PUBLIC
         ${convert_TEST_SYSTEM_INCLUDE_DIRS}
+    )
+
+    # Link Libraries
+    target_link_libraries(${PROJECT_NAME}_tests PUBLIC
+        ${PROJECT_NAME}
+        ${convert_TEST_SYSTEM_LIBRARIES}
     )
 
     # Enable ctest

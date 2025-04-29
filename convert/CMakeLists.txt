@@ -16,8 +16,29 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 option(BUILD_DOCUMENTATION "Build Doxygen Documentation" OFF)
 option(BUILD_TESTS "Build Tests" OFF)
 
+# Get information about the CXX Compiler
+message(STATUS "Detected ${CMAKE_CXX_COMPILER_ID} CXX compiler version ${CMAKE_CXX_COMPILER_VERSION}")
+
+# Get CXX compiler version
+string(REPLACE "." ";" CMAKE_CXX_COMPILER_VERSION_LIST ${CMAKE_CXX_COMPILER_VERSION})
+list(GET CMAKE_CXX_COMPILER_VERSION_LIST 0 CMAKE_CXX_COMPILER_VERSION_MAJOR)
+list(GET CMAKE_CXX_COMPILER_VERSION_LIST 1 CMAKE_CXX_COMPILER_VERSION_MINOR)
+
+# Set Eigen3 minimum version
+set(MIN_EIGEN_VERSION "3.3.7")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # Note: gcc/g++
+	if (CMAKE_CXX_COMPILER_VERSION_MAJOR GREATER_EQUAL 10)
+	    # g++-10 with c++20 requires Eigen3 >=3.3.9. For further details see issues:
+	    #  - https://gitlab.com/libeigen/eigen/-/issues/2012
+	    #  - https://gitlab.com/libeigen/eigen/-/issues/1872
+	    set(MIN_EIGEN_VERSION "3.3.9")
+	endif()
+else()
+	message(WARNING "Eigen3 minimum version not known for non-GNU CXX compiler")
+endif()
+
 # Find packages quietly to set defaults
-find_package(Eigen3 3.3 QUIET)
+find_package(Eigen3 ${MIN_EIGEN_VERSION} QUIET)
 find_package(GTSAM QUIET)
 find_package(manif QUIET)
 find_package(Matlab QUIET)
@@ -41,7 +62,7 @@ endif()
 
 # Find required packages for enabled components
 if (BUILD_EIGEN_COMPONENTS AND (NOT DEFINED Eigen3_FOUND OR NOT ${Eigen3_FOUND}))
-    find_package(Eigen3 3.3 REQUIRED)
+    find_package(Eigen3 ${MIN_EIGEN_VERSION} REQUIRED)
 endif()
 if (BUILD_GTSAM_COMPONENTS AND (NOT DEFINED GTSAM_FOUND OR NOT ${GTSAM_FOUND}))
     find_package(GTSAM REQUIRED)
@@ -76,8 +97,9 @@ set(convert_DEFINITIONS "")
 set(convert_SYSTEM_INCLUDE_DIRS "")
 set(convert_SYSTEM_LIBRARIES "")
 
-# Process components in dependency order so that convert_SYSTEM_LIBRARIES order has most dependent libraries first. The
-# external library dependencies are:
+# Process components in dependency order so that convert_SYSTEM_LIBRARIES order has most dependent libraries first.
+# Header-only libraries can be flexible in their ordering.
+# The external library dependencies are:
 #   manif -> Eigen (header-only)
 #   gtsam -> Eigen (header-only)
 #   sensorbox -> mathbox (header-only), Eigen (header-only)
@@ -93,12 +115,12 @@ if (BUILD_MANIF_COMPONENTS AND BUILD_ROS_COMPONENTS)
 
     # Append to system include directories
     list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${manif_INCLUDE_DIRS}
         ${geometry_msgs_INCLUDE_DIRS}
     )
 
     # Append to system libraries
     list(APPEND convert_SYSTEM_LIBRARIES
+        MANIF::manif
         ${geometry_msgs_LIBRARIES}
     )
 endif()
@@ -115,7 +137,6 @@ if (BUILD_GTSAM_COMPONENTS AND BUILD_ROS_COMPONENTS)
 
     # Append to system include directories
     list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${GTSAM_INCLUDE_DIR}
         ${geometry_msgs_INCLUDE_DIRS}
         ${nav_msgs_INCLUDE_DIRS}
     )
@@ -163,14 +184,13 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_GTSAM_COMPONENTS)
 
     # Append to system include directories
     list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${EIGEN3_INCLUDE_DIRS}
         ${GTSAM_INCLUDE_DIR}
     )
 
     # Append to system libraries
     list(APPEND convert_SYSTEM_LIBRARIES
-        gtsam
         Eigen3::Eigen
+        gtsam
     )
 endif()
 
@@ -207,11 +227,6 @@ if (BUILD_ROS_COMPONENTS)
         # Append to definitions
         list(APPEND convert_DEFINITIONS CONVERT_EIGEN)
 
-        # Append to system include directories
-        list(APPEND convert_SYSTEM_INCLUDE_DIRS
-            ${EIGEN3_INCLUDE_DIRS}
-        )
-
         # Append to system libraries
         list(APPEND convert_SYSTEM_LIBRARIES
             Eigen3::Eigen
@@ -232,11 +247,6 @@ if (BUILD_MATLAB_COMPONENTS)
         # Append to definitions
         list(APPEND convert_DEFINITIONS CONVERT_EIGEN)
 
-        # Append to system include directories
-        list(APPEND convert_SYSTEM_INCLUDE_DIRS
-            ${EIGEN3_INCLUDE_DIRS}
-        )
-
         # Append to system libraries
         list(APPEND convert_SYSTEM_LIBRARIES
             Eigen3::Eigen
@@ -247,11 +257,6 @@ endif()
 if (BUILD_EIGEN_COMPONENTS)
     # Append to definitions
     list(APPEND convert_DEFINITIONS CONVERT_EIGEN)
-
-    # Append to system include directories
-    list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${EIGEN3_INCLUDE_DIRS}
-    )
 
     # Append to system libraries
     list(APPEND convert_SYSTEM_LIBRARIES
@@ -292,11 +297,6 @@ if (convert_SRC_FILES)
         ${convert_SRC_FILES}
     )
 
-    # Link libraries
-    target_link_libraries(${PROJECT_NAME} PUBLIC
-        ${convert_SYSTEM_LIBRARIES}
-    )
-
     # Definitions
     target_compile_definitions(${PROJECT_NAME} PUBLIC ${convert_DEFINITIONS})
 
@@ -319,6 +319,11 @@ if (convert_SRC_FILES)
     # System include directories
     target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
         ${convert_SYSTEM_INCLUDE_DIRS}
+    )
+
+    # Link libraries
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+        ${convert_SYSTEM_LIBRARIES}
     )
 
     # Build tests
