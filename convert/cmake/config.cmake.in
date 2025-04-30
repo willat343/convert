@@ -8,7 +8,7 @@ set(convert_DEFINITIONS "@convert_DEFINITIONS@")
 
 # Find required packages, ensuring that dynamically linked libraries will be found
 if ("CONVERT_EIGEN" IN_LIST convert_DEFINITIONS)
-    find_package(Eigen3 3.3 REQUIRED)
+    find_package(Eigen3 @MIN_EIGEN_VERSION@ REQUIRED)
 endif()
 if ("CONVERT_GTSAM" IN_LIST convert_DEFINITIONS)
     find_package(GTSAM REQUIRED)
