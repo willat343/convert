@@ -48,7 +48,7 @@ ToType to(const From1Type& from1, const From2Type& from2);
  * @return std::vector<ToType>
  */
 template<typename ToType, typename FromType>
-std::vector<ToType> to(const std::vector<FromType>& from);
+std::vector<ToType> to_for_each_in(const std::vector<FromType>& from);
 
 }
 
