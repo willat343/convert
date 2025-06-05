@@ -8,6 +8,9 @@
 namespace convert {
 
 template<typename Scalar>
+void to(const matlab::data::TypedArray<Scalar>& array, Scalar& scalar);
+
+template<typename Scalar>
 void to(const matlab::data::TypedArray<Scalar>& array, std::vector<Scalar>& vector);
 
 template<typename Scalar>
