@@ -8,6 +8,13 @@ set(convert_TEST_SYSTEM_LIBRARIES
     pthread
 )
 
+if (BUILD_EIGEN_COMPONENTS)
+    # Append to source files
+    list(APPEND convert_TEST_SRC_FILES
+        src/eigen_std/eigen_std.cpp
+    )
+endif()
+
 if (BUILD_EIGEN_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
     list(APPEND convert_TEST_SRC_FILES

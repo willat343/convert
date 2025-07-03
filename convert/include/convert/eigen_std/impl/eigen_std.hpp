@@ -14,11 +14,25 @@ void to(const std::vector<Scalar>& in, Eigen::Matrix<Scalar, Eigen::Dynamic, 1>&
     }
 }
 
+template<std::size_t N, typename Scalar>
+void to(const std::array<Scalar, N>& in, Eigen::Matrix<Scalar, int(N), 1>& out) {
+    for (std::size_t i = 0; i < N; ++i) {
+        out[i] = in[i];
+    }
+}
+
 template<typename Scalar>
 void to(const Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& in, std::vector<Scalar>& out) {
     const Eigen::Index size = in.size();
     out.resize(static_cast<std::size_t>(size));
     for (Eigen::Index i = 0; i < size; ++i) {
+        out[i] = in[i];
+    }
+}
+
+template<std::size_t N, typename Scalar>
+void to(const Eigen::Matrix<Scalar, int(N), 1>& in, std::array<Scalar, N>& out) {
+    for (std::size_t i = 0; i < N; ++i) {
         out[i] = in[i];
     }
 }

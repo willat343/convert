@@ -21,6 +21,8 @@
 #include <std_msgs/Header.h>
 #endif
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdlib>
 #include <string>
@@ -62,6 +64,14 @@ inline double random_instance<double>() {
 template<>
 inline std::uint32_t random_instance<std::uint32_t>() {
     return static_cast<std::uint32_t>(rand());
+}
+
+template<>
+inline std::array<double, 3> random_instance<std::array<double, 3>>() {
+    std::array<double, 3> array;
+    std::transform(array.cbegin(), array.cend(), array.begin(),
+            [](const double) { return static_cast<double>(rand()); });
+    return array;
 }
 
 template<>
