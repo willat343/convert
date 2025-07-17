@@ -10,7 +10,7 @@ namespace convert {
 template<typename Scalar>
 void to(const matlab::data::TypedArray<Scalar>& array, Scalar& scalar) {
     const matlab::data::ArrayDimensions dimensions = array.getDimensions();
-    assert(dimensions.size() == 2 && dimensions[0] == 1 && dimensions[1] = 1);
+    assert(dimensions.size() == 2 && dimensions[0] == 1 && dimensions[1] == 1);
     scalar = array[0];
 }
 
