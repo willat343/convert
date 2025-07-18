@@ -5,6 +5,9 @@ project(convert
     LANGUAGES CXX
 )
 
+# Installation directories
+include(GNUInstallDirs)
+
 # CMake Build Type
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose build type" FORCE)
@@ -15,6 +18,9 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 # General Options
 option(BUILD_DOCUMENTATION "Build Doxygen Documentation" OFF)
 option(BUILD_TESTS "Build Tests" OFF)
+option(DEVELOPER_MODE "Use local versions of sensorbox" OFF)
+option(USE_SYSTEM_Eigen3 "Use system install of Eigen3" ON)
+option(USE_SYSTEM_manif "Use system install of manif" ON)
 
 # Get information about the CXX Compiler
 message(STATUS "Detected ${CMAKE_CXX_COMPILER_ID} CXX compiler version ${CMAKE_CXX_COMPILER_VERSION}")
@@ -24,55 +30,94 @@ string(REPLACE "." ";" CMAKE_CXX_COMPILER_VERSION_LIST ${CMAKE_CXX_COMPILER_VERS
 list(GET CMAKE_CXX_COMPILER_VERSION_LIST 0 CMAKE_CXX_COMPILER_VERSION_MAJOR)
 list(GET CMAKE_CXX_COMPILER_VERSION_LIST 1 CMAKE_CXX_COMPILER_VERSION_MINOR)
 
-# Set Eigen3 minimum version
-set(MIN_EIGEN_VERSION "3.3.7")
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # Note: gcc/g++
-	if (CMAKE_CXX_COMPILER_VERSION_MAJOR GREATER_EQUAL 10)
-	    # g++-10 with c++20 requires Eigen3 >=3.3.9. For further details see issues:
-	    #  - https://gitlab.com/libeigen/eigen/-/issues/2012
-	    #  - https://gitlab.com/libeigen/eigen/-/issues/1872
-	    set(MIN_EIGEN_VERSION "3.3.9")
-	endif()
+# Optional Dependency: Eigen3 (Target: Eigen3::Eigen, Note: Eigen3::Eigen sets INTERFACE_INCLUDE_DIRECTORIES)
+if (TARGET Eigen3::Eigen)
+    option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ON)
 else()
-	message(WARNING "Eigen3 minimum version not known for non-GNU CXX compiler")
+    set(EIGEN3_VERSION "3.3.7")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # Note: gcc/g++
+        if (CMAKE_CXX_COMPILER_VERSION_MAJOR GREATER_EQUAL 10)
+            # g++-10 with c++20 requires Eigen3 >=3.3.9. For further details see issues:
+            #  - https://gitlab.com/libeigen/eigen/-/issues/2012
+            #  - https://gitlab.com/libeigen/eigen/-/issues/1872
+            set(EIGEN3_VERSION "3.3.9")
+        endif()
+    endif()
+    if (${USE_SYSTEM_Eigen3})
+        find_package(Eigen3 ${EIGEN3_VERSION} QUIET)
+        option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ${Eigen3_FOUND})
+        if (BUILD_EIGEN_COMPONENTS AND (NOT DEFINED Eigen3_FOUND OR NOT ${Eigen3_FOUND}))
+            find_package(Eigen3 ${EIGEN3_VERSION} REQUIRED)
+        endif()
+    else()
+        FetchContent_Declare(
+            eigen
+            GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+            GIT_TAG ${EIGEN3_VERSION}
+        )
+        FetchContent_MakeAvailable(eigen)
+        message(STATUS "Fetched eigen to ${eigen_SOURCE_DIR} with version ${EIGEN3_VERSION}")
+    endif()
 endif()
 
-# Find packages quietly to set defaults
-find_package(Eigen3 ${MIN_EIGEN_VERSION} QUIET)
-find_package(GTSAM QUIET)
-find_package(manif QUIET)
-find_package(Matlab QUIET)
-find_package(geometry_msgs QUIET)
-find_package(sensorbox QUIET)
-
-# Component Options
-option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" ${Eigen3_FOUND})
-option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" ${GTSAM_FOUND})
-option(BUILD_MANIF_COMPONENTS "Build manif Components" ${manif_FOUND})
-option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ${Matlab_FOUND})
-option(BUILD_ROS_COMPONENTS "Build ROS Components" ${geometry_msgs_FOUND})
-option(BUILD_SENSORBOX_COMPONENTS "Build sensorbox Components" ${sensorbox_FOUND})
-
+# Optional Dependency: manif (Target: MANIF::manif, Note: MANIF::manif sets INTERFACE_INCLUDE_DIRECTORIES, and
+# manif_LIBRARIES is empty)
+if (TARGET MANIF::manif)
+    option(BUILD_MANIF_COMPONENTS "Build manif Components" ON)
+else()
+    set(MANIF_VERSION "0.0.5")
+    if (${USE_SYSTEM_manif})
+        find_package(manif ${MANIF_VERSION} QUIET)
+        option(BUILD_MANIF_COMPONENTS "Build manif Components" ${manif_FOUND})
+        if (BUILD_MANIF_COMPONENTS AND (NOT DEFINED manif_FOUND OR NOT ${manif_FOUND}))
+            find_package(manif ${MANIF_VERSION} REQUIRED)
+        endif()
+    else()
+        FetchContent_Declare(
+            manif
+            GIT_REPOSITORY https://github.com/artivis/manif.git
+            GIT_TAG ${MANIF_VERSION}
+        )
+        FetchContent_MakeAvailable(manif)
+        message(STATUS "Fetched manif to ${manif_SOURCE_DIR} with version ${MANIF_VERSION}")
+    endif()
+endif()
 # Enforce component dependencies (internal to convert, not external library dependencies)
 if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
-    message(WARNING "BUILD_MANIF_COMPONENTS was enabled but it relies on BUILD_EIGEN_COMPONENTS which \
-            was not enabled. Turning on BUILD_EIGEN_COMPONENTS.")
-    set(BUILD_EIGEN_COMPONENTS ON CACHE BOOL "Build manif Components of Convert Library" FORCE)
+    message(ERROR "BUILD_MANIF_COMPONENTS was enabled but it relies on BUILD_EIGEN_COMPONENTS which \
+            was not enabled (either disabled or Eigen3 was not found).")
 endif()
 
-# Find required packages for enabled components
-if (BUILD_EIGEN_COMPONENTS AND (NOT DEFINED Eigen3_FOUND OR NOT ${Eigen3_FOUND}))
-    find_package(Eigen3 ${MIN_EIGEN_VERSION} REQUIRED)
+# Optional Dependency: GTSAM
+if (TARGET gtsam)
+    option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" ON)
+else()
+    set(GTSAM_VERSION "")
+    find_package(GTSAM ${GTSAM_VERSION} QUIET)
+    option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" ${GTSAM_FOUND})
+    if (BUILD_GTSAM_COMPONENTS AND (NOT DEFINED GTSAM_FOUND OR NOT ${GTSAM_FOUND}))
+        find_package(GTSAM ${GTSAM_VERSION} REQUIRED)
+    endif()
 endif()
-if (BUILD_GTSAM_COMPONENTS AND (NOT DEFINED GTSAM_FOUND OR NOT ${GTSAM_FOUND}))
-    find_package(GTSAM REQUIRED)
+
+# Optional Dependency: Matlab
+if (TARGET Matlab::matlab)
+    option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ON)
+else()
+    set(MATLAB_VERSION "")
+    find_package(Matlab ${MATLAB_VERSION} QUIET)
+    option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" ${Matlab_FOUND})
+    if (BUILD_MATLAB_COMPONENTS AND (NOT DEFINED Matlab_FOUND OR NOT ${Matlab_FOUND}))
+        find_package(Matlab ${MATLAB_VERSION} REQUIRED MEX_COMPILER)
+    endif()
 endif()
-if (BUILD_MANIF_COMPONENTS AND (NOT DEFINED manif_FOUND OR NOT ${manif_FOUND}))
-    find_package(manif REQUIRED)
-endif()
-if (BUILD_MATLAB_COMPONENTS AND (NOT DEFINED Matlab_FOUND OR NOT ${Matlab_FOUND}))
-    find_package(Matlab REQUIRED MEX_COMPILER)
-endif()
+
+# Optional Dependency: ROS 1
+find_package(geometry_msgs QUIET)
+find_package(nav_msgs QUIET)
+find_package(sensor_msgs QUIET)
+find_package(std_msgs QUIET)
+option(BUILD_ROS_COMPONENTS "Build ROS Components" ${geometry_msgs_FOUND})
 if (BUILD_ROS_COMPONENTS)
     if (NOT DEFINED geometry_msgs_FOUND OR NOT ${geometry_msgs_FOUND})
         find_package(geometry_msgs REQUIRED)
@@ -87,8 +132,26 @@ if (BUILD_ROS_COMPONENTS)
         find_package(std_msgs REQUIRED)
     endif()
 endif()
-if (BUILD_SENSORBOX_COMPONENTS AND (NOT DEFINED sensorbox_FOUND OR NOT ${sensorbox_FOUND}))
-    find_package(sensorbox REQUIRED)
+
+# Optional Dependency: sensorbox (Target: sensorbox::sensorbox)
+if (TARGET sensorbox::sensorbox)
+    option(BUILD_SENSORBOX_COMPONENTS "Build sensorbox Components" ON)
+else()
+    option(BUILD_SENSORBOX_COMPONENTS "Build sensorbox Components" ON)
+    if (${BUILD_SENSORBOX_COMPONENTS})
+        set(SENSORBOX_VERSION "0.5.0")
+        FetchContent_Declare(
+            sensorbox
+            GIT_REPOSITORY git@github.com:willat343/sensorbox.git
+            GIT_TAG v${SENSORBOX_VERSION}
+        )
+        FetchContent_MakeAvailable(sensorbox)
+        if (${DEVELOPER_MODE})
+            message(STATUS "Found sensorbox at ${sensorbox_SOURCE_DIR} (DEVELOPER_MODE = ON)")
+        else()
+            message(STATUS "Fetched sensorbox to ${sensorbox_SOURCE_DIR} with version ${SENSORBOX_VERSION}")
+        endif()
+    endif()
 endif()
 
 # Variables
@@ -182,11 +245,6 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_GTSAM_COMPONENTS)
     # Append to definitions
     list(APPEND convert_DEFINITIONS CONVERT_EIGEN CONVERT_GTSAM)
 
-    # Append to system include directories
-    list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${GTSAM_INCLUDE_DIR}
-    )
-
     # Append to system libraries
     list(APPEND convert_SYSTEM_LIBRARIES
         Eigen3::Eigen
@@ -269,9 +327,6 @@ list(REMOVE_DUPLICATES convert_DEFINITIONS)
 list(REMOVE_DUPLICATES convert_SYSTEM_INCLUDE_DIRS)
 list(REMOVE_DUPLICATES convert_SYSTEM_LIBRARIES)
 
-# Installation directories
-include(GNUInstallDirs)
-
 # Report components that will be built
 message(NOTICE "Components:")
 message(NOTICE "\t    EIGEN = ${BUILD_EIGEN_COMPONENTS}")
@@ -293,36 +348,38 @@ if (convert_SRC_FILES)
         convert_SYSTEM_LIBRARIES = ${convert_SYSTEM_LIBRARIES}")
 
     # Build library
-    add_library(${PROJECT_NAME} SHARED
+    set(LIBRARY_NAME ${PROJECT_NAME})
+    add_library(${LIBRARY_NAME} SHARED
         ${convert_SRC_FILES}
     )
+    add_library(${PROJECT_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
 
     # Definitions
-    target_compile_definitions(${PROJECT_NAME} PUBLIC ${convert_DEFINITIONS})
+    target_compile_definitions(${LIBRARY_NAME} PUBLIC ${convert_DEFINITIONS})
 
     # Properties
-    set_target_properties(${PROJECT_NAME} PROPERTIES
+    set_target_properties(${LIBRARY_NAME} PROPERTIES
         CXX_STANDARD 20
     )
 
     # Compile options
-    target_compile_options(${PROJECT_NAME} PRIVATE
+    target_compile_options(${LIBRARY_NAME} PRIVATE
         -Wall -Wextra -Wpedantic -ftemplate-backtrace-limit=${TEMPLATE_BACKTRACE_LIMIT}
     )
 
     # Include directories
-    target_include_directories(${PROJECT_NAME} PUBLIC
+    target_include_directories(${LIBRARY_NAME} PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 
     # System include directories
-    target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+    target_include_directories(${LIBRARY_NAME} SYSTEM PUBLIC
         ${convert_SYSTEM_INCLUDE_DIRS}
     )
 
     # Link libraries
-    target_link_libraries(${PROJECT_NAME} PUBLIC
+    target_link_libraries(${LIBRARY_NAME} PUBLIC
         ${convert_SYSTEM_LIBRARIES}
     )
 
@@ -345,7 +402,7 @@ if (convert_SRC_FILES)
 
     # Installation
     install(
-        TARGETS ${PROJECT_NAME}
+        TARGETS ${LIBRARY_NAME}
         EXPORT ${PROJECT_NAME}
         PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
