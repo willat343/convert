@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(convert
-    VERSION 0.4.0
+    VERSION 0.5.0
     DESCRIPTION "Conversion Library"
     LANGUAGES CXX
 )
