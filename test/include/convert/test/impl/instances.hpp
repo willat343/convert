@@ -86,15 +86,6 @@ random_instance<std::chrono::time_point<std::chrono::system_clock>>() {
     return std::chrono::time_point<std::chrono::system_clock>(std::chrono::nanoseconds(rand()));
 }
 
-template<>
-inline boost::array<double, 9UL> random_instance<boost::array<double, 9UL>>() {
-    boost::array<double, 9UL> instance;
-    for (std::size_t i = 0; i < 9UL; ++i) {
-        instance[i] = random_instance<double>();
-    }
-    return instance;
-}
-
 #ifdef CONVERT_EIGEN
 template<>
 inline Eigen::Vector3d random_instance<Eigen::Vector3d>() {
@@ -120,6 +111,15 @@ inline manif::R3d random_instance<manif::R3d>() {
 #endif
 
 #ifdef CONVERT_ROS
+template<>
+inline boost::array<double, 9UL> random_instance<boost::array<double, 9UL>>() {
+    boost::array<double, 9UL> instance;
+    for (std::size_t i = 0; i < 9UL; ++i) {
+        instance[i] = random_instance<double>();
+    }
+    return instance;
+}
+
 template<>
 inline ros::Time random_instance<ros::Time>() {
     return ros::Time(random_instance<std::uint32_t>(), random_instance<std::uint32_t>());
