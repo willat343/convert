@@ -407,16 +407,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
     export(PACKAGE ${PROJECT_NAME})
 
     # Uninstallation
-    if(NOT TARGET uninstall AND PROJECT_IS_TOP_LEVEL)
-        configure_file(
-            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-            "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-            @ONLY
-        )
-
-        # Add uninstall target
-        add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-    endif()
+    create_uninstall_target()
 else()
     message(WARNING "Not building convert library, possibly because no valid combination of components was enabled.")
 endif()
