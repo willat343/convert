@@ -190,7 +190,7 @@ if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
 
     # Append to system libraries
     list(APPEND convert_SYSTEM_LIBRARIES
-        sensorbox
+        sensorbox::sensorbox
         ${sensor_msgs_LIBRARIES}
     )
 endif()
