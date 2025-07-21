@@ -52,15 +52,17 @@ get_cxx_compiler_info()
 
 # Optional Dependency: Eigen3 (Target: Eigen3::Eigen)
 if (BUILD_EIGEN_COMPONENTS)
+    set(EIGEN3_VERSION "3.4.0")
     import_Eigen3(
-        VERSION "3.4.0"
+        VERSION ${EIGEN3_VERSION}
     )
 endif()
 
 # Optional Dependency: manif (Target: MANIF::manif)
 if (BUILD_MANIF_COMPONENTS)
+    set(MANIF_VERSION "0.0.6")
     import_manif(
-        VERSION "0.0.6"
+        VERSION ${MANIF_VERSION}
     )
 endif()
 
