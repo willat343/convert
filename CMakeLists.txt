@@ -402,7 +402,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
     export(
         EXPORT ${PROJECT_NAME}
         NAMESPACE ${PROJECT_NAME}::
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-build-export.cmake"
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-export.cmake"
     )
     export(PACKAGE ${PROJECT_NAME})
 
