@@ -32,7 +32,7 @@ if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
 endif()
 
 # Dependency: cmakebox
-set(CMAKEBOX_VERSION "0.0.1")
+set(CMAKEBOX_VERSION "0.0.3")
 FetchContent_Declare(
     cmakebox
     GIT_REPOSITORY git@github.com:willat343/cmakebox.git
@@ -41,8 +41,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(cmakebox)
 list(APPEND CMAKE_MODULE_PATH "${cmakebox_SOURCE_DIR}/cmake")
 include(CMakeBox)
-include(Dependencies/Eigen3)
-include(Dependencies/manif)
 
 # CMake Build Type
 setup_build_type()
