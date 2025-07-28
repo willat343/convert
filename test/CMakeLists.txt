@@ -37,13 +37,6 @@ if (BUILD_ROS_COMPONENTS)
     )
 endif()
 
-if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
-    # Append to source files
-    list(APPEND convert_TEST_SRC_FILES
-        src/sensorbox_ros/imu.cpp
-    )
-endif()
-
 if (convert_TEST_SRC_FILES)
     message(DEBUG "Building convert library tests as ${PROJECT_NAME}_tests with\n\
         convert_TEST_SRC_FILES = ${convert_TEST_SRC_FILES}\n\

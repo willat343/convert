@@ -21,9 +21,7 @@ option(BUILD_MANIF_COMPONENTS "Build manif Components" OFF)
 option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" OFF)
 option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" OFF)
 option(BUILD_ROS_COMPONENTS "Build ROS Components" OFF)
-option(BUILD_SENSORBOX_COMPONENTS "Build sensorbox Components" OFF)
 option(BUILD_DOCUMENTATION "Build Doxygen Documentation" OFF)
-option(DEVELOPER_MODE "Use local versions of sensorbox" OFF)
 
 # Enforce component dependencies (internal to convert, not external library dependencies)
 if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
@@ -85,19 +83,6 @@ if (BUILD_ROS_COMPONENTS)
     find_package(std_msgs REQUIRED)
 endif()
 
-# Optional Dependency: sensorbox (Target: sensorbox::sensorbox)
-if (BUILD_SENSORBOX_COMPONENTS)
-    set(SENSORBOX_VERSION "0.6.0")
-    import_dependency(
-        sensorbox
-        TARGET sensorbox::sensorbox
-        VERSION ${SENSORBOX_VERSION}
-        USE_FIND_PACKAGE_REQUIRED_VERSION ${SENSORBOX_VERSION}
-        GIT_REPOSITORY git@github.com:willat343/sensorbox.git
-        GIT_TAG v${SENSORBOX_VERSION}
-    )
-endif()
-
 # Get number of components to build
 SET(NUM_BUILD_COMPONENTS 0)
 foreach(BUILD_COMPONENT
@@ -105,8 +90,7 @@ foreach(BUILD_COMPONENT
     BUILD_MANIF_COMPONENTS
     BUILD_GTSAM_COMPONENTS
     BUILD_MATLAB_COMPONENTS
-    BUILD_ROS_COMPONENTS
-    BUILD_SENSORBOX_COMPONENTS)
+    BUILD_ROS_COMPONENTS)
     if (${BUILD_COMPONENT})
         math(EXPR NUM_BUILD_COMPONENTS "${NUM_BUILD_COMPONENTS} + 1")
     endif()
@@ -123,7 +107,6 @@ set(convert_SYSTEM_LIBRARIES "")
 # The external library dependencies are:
 #   manif -> Eigen (header-only)
 #   gtsam -> Eigen (header-only)
-#   sensorbox -> mathbox (header-only), Eigen (header-only)
 
 if (BUILD_MANIF_COMPONENTS AND BUILD_ROS_COMPONENTS)
     # Append to source files
@@ -167,29 +150,6 @@ if (BUILD_GTSAM_COMPONENTS AND BUILD_ROS_COMPONENTS)
         gtsam
         ${geometry_msgs_LIBRARIES}
         ${nav_msgs_LIBRARIES}
-    )
-endif()
-
-if (BUILD_SENSORBOX_COMPONENTS AND BUILD_ROS_COMPONENTS)
-    # Append to source files
-    list(APPEND convert_SRC_FILES
-        src/sensorbox_ros/imu.cpp
-        src/sensorbox_ros/pose_twist.cpp
-        src/sensorbox_ros/pose.cpp
-    )
-
-    # Append to definitions
-    list(APPEND convert_DEFINITIONS CONVERT_ROS CONVERT_SENSORBOX)
-
-    # Append to system include directories
-    list(APPEND convert_SYSTEM_INCLUDE_DIRS
-        ${sensor_msgs_INCLUDE_DIRS}
-    )
-
-    # Append to system libraries
-    list(APPEND convert_SYSTEM_LIBRARIES
-        sensorbox::sensorbox
-        ${sensor_msgs_LIBRARIES}
     )
 endif()
 
@@ -292,7 +252,6 @@ message(NOTICE "\t    GTSAM = ${BUILD_GTSAM_COMPONENTS}")
 message(NOTICE "\t    MANIF = ${BUILD_MANIF_COMPONENTS}")
 message(NOTICE "\t   MATLAB = ${BUILD_MATLAB_COMPONENTS}")
 message(NOTICE "\t      ROS = ${BUILD_ROS_COMPONENTS}")
-message(NOTICE "\tSENSORBOX = ${BUILD_SENSORBOX_COMPONENTS}")
 
 # Template backtrace limit
 set(TEMPLATE_BACKTRACE_LIMIT "10" CACHE STRING "Template backtrace limit for compilation error verbosity. 0 to disable." FORCE)
