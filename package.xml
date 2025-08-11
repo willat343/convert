@@ -12,6 +12,7 @@
 
     <!-- Optional Dependencies -->
     <exec_depend>eigen</exec_depend>
+    <exec_depend>foxglove</exec_depend>
     <exec_depend>geometry_msgs</exec_depend>
     <exec_depend>gtsam</exec_depend>
     <exec_depend>manif</exec_depend>

@@ -14,6 +14,12 @@
 #if defined(CONVERT_EIGEN) && defined(CONVERT_MATLAB)
 #include "convert/eigen_matlab/eigen_matlab.hpp"
 #endif
+#if defined(CONVERT_EIGEN) && defined(CONVERT_FOXGLOVE)
+#include "convert/eigen_foxglove/eigen_foxglove.hpp"
+#endif
+#if defined(CONVERT_FOXGLOVE)
+#include "convert/foxglove_std/foxglove_std.hpp"
+#endif
 #if defined(CONVERT_GTSAM) && defined(CONVERT_ROS)
 #include "convert/gtsam_ros/gtsam_ros.hpp"
 #endif
@@ -25,9 +31,6 @@
 #endif
 #if defined(CONVERT_ROS)
 #include "convert/ros/ros.hpp"
-#endif
-#if defined(CONVERT_ROS) && defined(CONVERT_SENSORBOX)
-#include "convert/sensorbox_ros/sensorbox_ros.hpp"
 #endif
 
 #include "convert/convert_helpers.hpp"

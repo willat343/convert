@@ -18,6 +18,7 @@ include(CMakePackageConfigHelpers)
 # General Options
 option(BUILD_EIGEN_COMPONENTS "Build Eigen Components" OFF)
 option(BUILD_MANIF_COMPONENTS "Build manif Components" OFF)
+option(BUILD_FOXGLOVE_COMPONENTS "Build foxglove Components" OFF)
 option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" OFF)
 option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" OFF)
 option(BUILD_ROS_COMPONENTS "Build ROS Components" OFF)
@@ -30,7 +31,7 @@ if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
 endif()
 
 # Dependency: cmakebox
-set(CMAKEBOX_VERSION "0.0.3")
+set(CMAKEBOX_VERSION "0.0.8")
 FetchContent_Declare(
     cmakebox
     GIT_REPOSITORY git@github.com:willat343/cmakebox.git
@@ -51,6 +52,14 @@ if (BUILD_EIGEN_COMPONENTS)
     set(EIGEN3_VERSION "3.4.0")
     import_Eigen3(
         VERSION ${EIGEN3_VERSION}
+    )
+endif()
+
+# Optional Dependency: foxglove (Target: foxglove::foxglove)
+if (BUILD_FOXGLOVE_COMPONENTS)
+    set(FOXGLOVE_VERSION "0.10.1")
+    import_foxglove(
+        VERSION ${FOXGLOVE_VERSION}
     )
 endif()
 
@@ -88,6 +97,7 @@ SET(NUM_BUILD_COMPONENTS 0)
 foreach(BUILD_COMPONENT
     BUILD_EIGEN_COMPONENTS
     BUILD_MANIF_COMPONENTS
+    BUILD_FOXGLOVE_COMPONENTS
     BUILD_GTSAM_COMPONENTS
     BUILD_MATLAB_COMPONENTS
     BUILD_ROS_COMPONENTS)
@@ -101,6 +111,7 @@ set(convert_SRC_FILES "")
 set(convert_DEFINITIONS "")
 set(convert_SYSTEM_INCLUDE_DIRS "")
 set(convert_SYSTEM_LIBRARIES "")
+set(convert_EXPORT_TARGETS "")
 
 # Process components in dependency order so that convert_SYSTEM_LIBRARIES order has most dependent libraries first.
 # Header-only libraries can be flexible in their ordering.
@@ -167,6 +178,46 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_GTSAM_COMPONENTS)
     list(APPEND convert_SYSTEM_LIBRARIES
         Eigen3::Eigen
         gtsam
+    )
+endif()
+
+if (BUILD_EIGEN_COMPONENTS AND BUILD_FOXGLOVE_COMPONENTS)
+    # Append to source files
+    list(APPEND convert_SRC_FILES
+        src/eigen_foxglove/eigen_foxglove.cpp
+    )
+
+    # Append to definitions
+    list(APPEND convert_DEFINITIONS CONVERT_FOXGLOVE)
+
+    # Append to system libraries
+    list(APPEND convert_SYSTEM_LIBRARIES
+        foxglove::foxglove
+    )
+
+    # Append to export targets
+    list(APPEND convert_EXPORT_TARGETS
+        ${foxglove_REAL_TARGET}
+    )
+endif()
+
+if (BUILD_FOXGLOVE_COMPONENTS)
+    # Append to source files
+    list(APPEND convert_SRC_FILES
+        src/foxglove_std/foxglove_std.cpp
+    )
+
+    # Append to definitions
+    list(APPEND convert_DEFINITIONS CONVERT_FOXGLOVE)
+
+    # Append to system libraries
+    list(APPEND convert_SYSTEM_LIBRARIES
+        foxglove::foxglove
+    )
+
+    # Append to export targets
+    list(APPEND convert_EXPORT_TARGETS
+        ${foxglove_REAL_TARGET}
     )
 endif()
 
@@ -244,10 +295,12 @@ endif()
 list(REMOVE_DUPLICATES convert_DEFINITIONS)
 list(REMOVE_DUPLICATES convert_SYSTEM_INCLUDE_DIRS)
 list(REMOVE_DUPLICATES convert_SYSTEM_LIBRARIES)
+list(REMOVE_DUPLICATES convert_EXPORT_TARGETS)
 
 # Report components that will be built
 message(NOTICE "Components (${NUM_BUILD_COMPONENTS} ENABLED):")
 message(NOTICE "\t    EIGEN = ${BUILD_EIGEN_COMPONENTS}")
+message(NOTICE "\t FOXGLOVE = ${BUILD_FOXGLOVE_COMPONENTS}")
 message(NOTICE "\t    GTSAM = ${BUILD_GTSAM_COMPONENTS}")
 message(NOTICE "\t    MANIF = ${BUILD_MANIF_COMPONENTS}")
 message(NOTICE "\t   MATLAB = ${BUILD_MATLAB_COMPONENTS}")
@@ -328,7 +381,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
 
     # Installation
     install(
-        TARGETS ${LIBRARY_NAME}
+        TARGETS ${LIBRARY_NAME} ${convert_EXPORT_TARGETS}
         EXPORT ${PROJECT_NAME}
         PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
