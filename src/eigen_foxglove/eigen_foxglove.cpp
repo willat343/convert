@@ -21,13 +21,17 @@ void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Vector3&
 
 void to(const Eigen::Ref<const Eigen::Vector2d>& in_position, const Eigen::Rotation2Dd& in_orientation,
         foxglove::schemas::Pose& out) {
+    out.position.emplace();
     to(in_position, *out.position);
+    out.orientation.emplace();
     to(in_orientation, *out.orientation);
 }
 
 void to(const Eigen::Ref<const Eigen::Vector3d>& in_position, const Eigen::Quaterniond& in_orientation,
         foxglove::schemas::Pose& out) {
+    out.position.emplace();
     to(in_position, *out.position);
+    out.orientation.emplace();
     to(in_orientation, *out.orientation);
 }
 

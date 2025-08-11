@@ -28,7 +28,9 @@ void to(const Eigen::MatrixBase<Derived>& in, foxglove::schemas::Vector3& out) {
 template<int D>
     requires(D == 2 || D == 3)
 void to(const Eigen::Transform<double, D, Eigen::Isometry>& in, foxglove::schemas::Pose& out) {
+    out.position.emplace();
     to(in.translation(), *out.position);
+    out.orientation.emplace();
     if constexpr (D == 2) {
         to(Eigen::Rotation2Dd{in.rotation()}, *out.orientation);
     } else {
@@ -43,7 +45,9 @@ void to(const std::string& in_parent_frame, const std::string& in_child_frame,
     out.timestamp = std::nullopt;
     out.parent_frame_id = in_parent_frame;
     out.child_frame_id = in_child_frame;
+    out.translation.emplace();
     to(in_transform.translation(), *out.translation);
+    out.rotation.emplace();
     if constexpr (D == 2) {
         to(Eigen::Rotation2Dd{in_transform.rotation()}, *out.rotation);
     } else {
