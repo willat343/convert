@@ -42,7 +42,6 @@ import_dependency(
     convert
     TARGET convert::convert
     VERSION ${CONVERT_VERSION}
-    USE_FIND_PACKAGE_REQUIRED_VERSION ${CONVERT_VERSION}
     GIT_REPOSITORY git@github.com:willat343/convert
     GIT_TAG v${CONVERT_VERSION}
 )
