@@ -47,6 +47,17 @@ setup_build_type()
 # Get CXX Compiler Information
 get_cxx_compiler_info()
 
+# Dependency: cppbox (Target: cppbox::cppbox)
+set(CPPBOX_VERSION "0.1.2")
+import_dependency(
+    cppbox
+    TARGET cppbox::cppbox
+    METHOD FETCH_GIT
+    FIND_PACKAGE_VERSION ${CPPBOX_VERSION}
+    GIT_REPOSITORY git@github.com:willat343/cppbox.git
+    GIT_TAG v${CPPBOX_VERSION}
+)
+
 # Optional Dependency: Eigen3 (Target: Eigen3::Eigen)
 if (BUILD_EIGEN_COMPONENTS)
     set(EIGEN3_VERSION "3.4.0")
@@ -110,7 +121,7 @@ endforeach()
 set(convert_SRC_FILES "")
 set(convert_DEFINITIONS "")
 set(convert_SYSTEM_INCLUDE_DIRS "")
-set(convert_SYSTEM_LIBRARIES "")
+set(convert_SYSTEM_LIBRARIES "cppbox::cppbox")
 set(convert_EXPORT_TARGETS "")
 
 # Process components in dependency order so that convert_SYSTEM_LIBRARIES order has most dependent libraries first.

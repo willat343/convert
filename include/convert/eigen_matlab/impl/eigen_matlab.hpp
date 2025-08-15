@@ -1,6 +1,8 @@
 #ifndef CONVERT_EIGEN_MATLAB_IMPL_EIGEN_MATLAB_HPP
 #define CONVERT_EIGEN_MATLAB_IMPL_EIGEN_MATLAB_HPP
 
+#include <cppbox/exceptions.hpp>
+
 #include "convert/eigen_matlab/eigen_matlab.hpp"
 
 namespace convert {
@@ -8,12 +10,10 @@ namespace convert {
 template<typename MatrixType>
 std::vector<MatrixType> to_matrices(const matlab::data::CellArray& array) {
     const matlab::data::ArrayDimensions dimensions = array.getDimensions();
-    if (dimensions.size() != 2) {
-        throw std::runtime_error(
-                "Failed to convert MATLAB cell array to Eigen matrices: Invalid number of dimensions (should be 2).");
-    } else if (dimensions[0] > 1 && dimensions[1] > 1) {
-        throw std::runtime_error("Failed to convert MATLAB cell array to Eigen matrices: Both dimensions > 1.");
-    }
+    throw_if(dimensions.size() != 2,
+            "Failed to convert MATLAB cell array to Eigen matrices: Invalid number of dimensions (should be 2).");
+    throw_if(dimensions[0] > 1 && dimensions[1] > 1,
+            "Failed to convert MATLAB cell array to Eigen matrices: Both dimensions > 1.");
     const int size = std::max(dimensions[0], dimensions[1]);
     std::vector<MatrixType> matrices(size);
     for (int i = 0; i < size; ++i) {
@@ -37,19 +37,17 @@ MatrixType to_matrix(const matlab::data::TypedArray<typename MatrixType::Scalar>
     const int cols = array.getDimensions()[1];
     assert(MatrixType::RowsAtCompileTime == Eigen::Dynamic || MatrixType::RowsAtCompileTime == rows);
     assert(MatrixType::ColsAtCompileTime == Eigen::Dynamic || MatrixType::ColsAtCompileTime == cols);
-    if ((MatrixType::RowsAtCompileTime != Eigen::Dynamic && MatrixType::RowsAtCompileTime != rows) ||
-            (MatrixType::ColsAtCompileTime != Eigen::Dynamic && MatrixType::ColsAtCompileTime != cols)) {
-        throw std::runtime_error(
-                "Failed to convert MATLAB array to Eigen matrix. Incompatible row or column sizes. MATLAB array "
-                "dimensions were [" +
-                std::to_string(rows) + ", " + std::to_string(cols) + "]. Matrix dimensions were [" +
-                (MatrixType::RowsAtCompileTime == Eigen::Dynamic ? std::string("Dynamic")
-                                                                 : std::to_string(MatrixType::RowsAtCompileTime)) +
-                ", " +
-                (MatrixType::ColsAtCompileTime == Eigen::Dynamic ? std::string("Dynamic")
-                                                                 : std::to_string(MatrixType::ColsAtCompileTime)) +
-                "].");
-    }
+    throw_if((MatrixType::RowsAtCompileTime != Eigen::Dynamic && MatrixType::RowsAtCompileTime != rows) ||
+                     (MatrixType::ColsAtCompileTime != Eigen::Dynamic && MatrixType::ColsAtCompileTime != cols),
+            "Failed to convert MATLAB array to Eigen matrix. Incompatible row or column sizes. MATLAB array "
+            "dimensions were [" +
+                    std::to_string(rows) + ", " + std::to_string(cols) + "]. Matrix dimensions were [" +
+                    (MatrixType::RowsAtCompileTime == Eigen::Dynamic ? std::string("Dynamic")
+                                                                     : std::to_string(MatrixType::RowsAtCompileTime)) +
+                    ", " +
+                    (MatrixType::ColsAtCompileTime == Eigen::Dynamic ? std::string("Dynamic")
+                                                                     : std::to_string(MatrixType::ColsAtCompileTime)) +
+                    "].");
     MatrixType x(rows, cols);
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {

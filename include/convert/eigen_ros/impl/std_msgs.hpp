@@ -1,6 +1,8 @@
 #ifndef CONVERT_EIGEN_ROS_IMPL_STD_MSGS_HPP
 #define CONVERT_EIGEN_ROS_IMPL_STD_MSGS_HPP
 
+#include <cppbox/exceptions.hpp>
+
 #include "convert/eigen_ros/std_msgs.hpp"
 
 namespace convert {
@@ -31,11 +33,10 @@ void to(const Eigen::MatrixBase<Derived>& matrix, std_msgs::Float64MultiArray& m
 
 template<typename Derived>
 void to(const std_msgs::Float64MultiArray& msg, Eigen::MatrixBase<Derived>& matrix) {
-    if (msg.layout.dim.size() != 2 || static_cast<Eigen::Index>(msg.layout.dim[0].size) != matrix.rows() ||
-            static_cast<Eigen::Index>(msg.layout.dim[1].size) != matrix.cols()) {
-        throw std::runtime_error("Float64MultiArray msg dimensions did not match that of the matrix (" +
-                                 std::to_string(matrix.rows()) + ", " + std::to_string(matrix.cols()));
-    }
+    throw_if(msg.layout.dim.size() != 2 || static_cast<Eigen::Index>(msg.layout.dim[0].size) != matrix.rows() ||
+                     static_cast<Eigen::Index>(msg.layout.dim[1].size) != matrix.cols(),
+            "Float64MultiArray msg dimensions did not match that of the matrix (" + std::to_string(matrix.rows()) +
+                    ", " + std::to_string(matrix.cols()));
     for (std::uint32_t r = 0; r < msg.layout.dim[0].size; ++r) {
         for (std::uint32_t c = 0; c < msg.layout.dim[1].size; ++c) {
             matrix(r, c) = msg.data[msg.layout.data_offset + msg.layout.dim[1].stride * r + c];
