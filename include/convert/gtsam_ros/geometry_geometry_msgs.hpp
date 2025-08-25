@@ -17,4 +17,6 @@ void to(const geometry_msgs::Transform& msg, gtsam::Pose3& pose);
 
 }
 
+#include "convert/gtsam_ros/impl/geometry_geometry_msgs.hpp"
+
 #endif

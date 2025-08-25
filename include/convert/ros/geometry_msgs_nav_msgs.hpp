@@ -19,4 +19,6 @@ void to(const nav_msgs::Odometry& from_msg, geometry_msgs::PoseStamped& to_msg);
 
 }
 
+#include "convert/ros/impl/geometry_msgs_nav_msgs.hpp"
+
 #endif

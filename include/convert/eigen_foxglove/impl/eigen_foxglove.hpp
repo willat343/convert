@@ -57,4 +57,20 @@ void to(const std::string& in_parent_frame, const std::string& in_child_frame,
 
 }
 
+#if CONVERT_HEADER_ONLY
+#include "convert/eigen_foxglove/impl/eigen_foxglove.impl.hpp"
+#else
+namespace convert {
+
+extern template void to<Eigen::Vector3d>(const Eigen::MatrixBase<Eigen::Vector3d>&, foxglove::schemas::Vector3&);
+extern template void to<2>(const Eigen::Isometry2d&, foxglove::schemas::Pose&);
+extern template void to<3>(const Eigen::Isometry3d&, foxglove::schemas::Pose&);
+extern template void to<2>(const std::string& in_parent_frame, const std::string& in_child_frame,
+        const Eigen::Isometry2d&, foxglove::schemas::FrameTransform&);
+extern template void to<3>(const std::string& in_parent_frame, const std::string& in_child_frame,
+        const Eigen::Isometry3d&, foxglove::schemas::FrameTransform&);
+
+}
+#endif
+
 #endif

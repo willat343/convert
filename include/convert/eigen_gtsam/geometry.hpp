@@ -22,4 +22,6 @@ void to(const Eigen::Ref<const Eigen::Matrix3d>& m, gtsam::Rot3& r);
 
 }
 
+#include "convert/eigen_gtsam/impl/geometry.hpp"
+
 #endif

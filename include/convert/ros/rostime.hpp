@@ -4,14 +4,15 @@
 #include <ros/time.h>
 
 #include <chrono>
+#include <cppbox/time.hpp>
 
 namespace convert {
 
-template<typename Clock, typename Duration = typename Clock::duration>
-void to(const ros::Time& t, std::chrono::time_point<Clock, Duration>& tp);
+template<cppbox::IsTimePoint TimePoint>
+void to(const ros::Time& t, TimePoint& tp);
 
-template<typename Clock, typename Duration = typename Clock::duration>
-void to(const std::chrono::time_point<Clock, Duration>& tp, ros::Time& t);
+template<cppbox::IsTimePoint TimePoint>
+void to(const TimePoint& tp, ros::Time& t);
 
 }
 

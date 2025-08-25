@@ -5,20 +5,33 @@
 
 namespace convert {
 
-template<typename Clock, typename Duration>
-void to(const ros::Time& t, std::chrono::time_point<Clock, Duration>& tp) {
-    tp = std::chrono::time_point<Clock, Duration>(std::chrono::seconds(t.sec) + std::chrono::nanoseconds(t.nsec));
+template<cppbox::IsTimePoint TimePoint>
+void to(const ros::Time& t, TimePoint& tp) {
+    tp = TimePoint(std::chrono::seconds(t.sec) + std::chrono::nanoseconds(t.nsec));
 }
 
-template<typename Clock, typename Duration>
-void to(const std::chrono::time_point<Clock, Duration>& tp, ros::Time& t) {
+template<cppbox::IsTimePoint TimePoint>
+void to(const TimePoint& tp, ros::Time& t) {
     // duration_cast always rounds down
     t.sec = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
-    t.nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(
-            tp - std::chrono::time_point<Clock, Duration>(std::chrono::seconds(t.sec)))
-                     .count();
+    t.nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(tp - TimePoint(std::chrono::seconds(t.sec))).count();
 }
 
 }
+
+#if !CONVERT_HEADER_ONLY
+namespace convert {
+
+extern template void to<std::chrono::time_point<std::chrono::steady_clock>>(const ros::Time&,
+        std::chrono::time_point<std::chrono::steady_clock>&);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(const ros::Time&,
+        std::chrono::time_point<std::chrono::system_clock>&);
+extern template void to<std::chrono::time_point<std::chrono::steady_clock>>(
+        const std::chrono::time_point<std::chrono::steady_clock>&, ros::Time&);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(
+        const std::chrono::time_point<std::chrono::system_clock>&, ros::Time&);
+
+}
+#endif
 
 #endif

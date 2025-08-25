@@ -59,4 +59,6 @@ void to(const geometry_msgs::Twist& msg, Eigen::Ref<Eigen::Matrix<double, 6, 1>>
 
 }
 
+#include "convert/eigen_ros/impl/geometry_msgs.hpp"
+
 #endif

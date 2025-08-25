@@ -30,56 +30,100 @@ template<typename Scalar>
 void to(const Eigen::AngleAxis<Scalar>& aa, Eigen::Matrix<Scalar, 3, 1>& v);
 
 /**
+ * @brief Convert translation and 2D rotation to transform.
+ *
+ * @tparam Scalar
+ * @param t
+ * @param r
+ * @param T
+ */
+template<typename Scalar>
+void to(const Eigen::Translation<Scalar, 2>& t, const Eigen::Rotation2D<Scalar>& q,
+        Eigen::Transform<Scalar, 2, Eigen::Isometry>& T);
+
+/**
+ * @brief Convert translation vector and 2D rotation to transform.
+ *
+ * @tparam Scalar
+ * @param t
+ * @param r
+ * @param T
+ */
+template<typename Scalar>
+void to(const Eigen::Matrix<Scalar, 2, 1>& t, const Eigen::Rotation2D<Scalar>& q,
+        Eigen::Transform<Scalar, 2, Eigen::Isometry>& T);
+
+/**
  * @brief Convert translation and quaternion to transform.
  *
  * @tparam Scalar
- * @tparam D
  * @param t
  * @param q
  * @param T
  */
-template<typename Scalar, int D>
-void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Quaternion<Scalar>& q,
-        Eigen::Transform<Scalar, D, Eigen::Isometry>& T);
+template<typename Scalar>
+void to(const Eigen::Translation<Scalar, 3>& t, const Eigen::Quaternion<Scalar>& q,
+        Eigen::Transform<Scalar, 3, Eigen::Isometry>& T);
 
 /**
  * @brief Convert translation vector and quaternion to transform.
  *
  * @tparam Scalar
- * @tparam D
  * @param t
  * @param q
  * @param T
  */
-template<typename Scalar, int D>
-void to(const Eigen::Matrix<Scalar, D, 1>& t, const Eigen::Quaternion<Scalar>& q,
-        Eigen::Transform<Scalar, D, Eigen::Isometry>& T);
+template<typename Scalar>
+void to(const Eigen::Matrix<Scalar, 3, 1>& t, const Eigen::Quaternion<Scalar>& q,
+        Eigen::Transform<Scalar, 3, Eigen::Isometry>& T);
 
 /**
  * @brief Convert translation and rotation matrix to transform.
  *
  * @tparam Scalar
- * @tparam D
  * @param t
  * @param R
  * @param T
  */
-template<typename Scalar, int D>
-void to(const Eigen::Translation<Scalar, D>& t, const Eigen::Matrix<Scalar, D, D>& R,
-        Eigen::Transform<Scalar, D, Eigen::Isometry>& T);
+template<typename Scalar>
+void to(const Eigen::Translation<Scalar, 2>& t, const Eigen::Matrix<Scalar, 2, 2>& R,
+        Eigen::Transform<Scalar, 2, Eigen::Isometry>& T);
 
 /**
  * @brief Convert translation vector and rotation matrix to transform.
  *
  * @tparam Scalar
- * @tparam D
  * @param t
  * @param R
  * @param T
  */
-template<typename Scalar, int D>
-void to(const Eigen::Matrix<Scalar, D, 1>& t, const Eigen::Matrix<Scalar, D, D>& R,
-        Eigen::Transform<Scalar, D, Eigen::Isometry>& T);
+template<typename Scalar>
+void to(const Eigen::Matrix<Scalar, 2, 1>& t, const Eigen::Matrix<Scalar, 2, 2>& R,
+        Eigen::Transform<Scalar, 2, Eigen::Isometry>& T);
+
+/**
+ * @brief Convert translation and rotation matrix to transform.
+ *
+ * @tparam Scalar
+ * @param t
+ * @param R
+ * @param T
+ */
+template<typename Scalar>
+void to(const Eigen::Translation<Scalar, 3>& t, const Eigen::Matrix<Scalar, 3, 3>& R,
+        Eigen::Transform<Scalar, 3, Eigen::Isometry>& T);
+
+/**
+ * @brief Convert translation vector and rotation matrix to transform.
+ *
+ * @tparam Scalar
+ * @param t
+ * @param R
+ * @param T
+ */
+template<typename Scalar>
+void to(const Eigen::Matrix<Scalar, 3, 1>& t, const Eigen::Matrix<Scalar, 3, 3>& R,
+        Eigen::Transform<Scalar, 3, Eigen::Isometry>& T);
 
 }
 

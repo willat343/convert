@@ -5,6 +5,7 @@
 #include <std_msgs/Header.h>
 
 #include <chrono>
+#include <cppbox/time.hpp>
 #include <string>
 
 namespace convert {
@@ -18,8 +19,8 @@ namespace convert {
  * @param tp
  * @param frame_id
  */
-template<typename Clock, typename Duration = typename Clock::Duration>
-void to(const std_msgs::Header& header, std::chrono::time_point<Clock, Duration>& tp, std::string& frame_id);
+template<cppbox::IsTimePoint TimePoint>
+void to(const std_msgs::Header& header, TimePoint& tp, std::string& frame_id);
 
 /**
  * @brief Convert time_point and frame id string to header. The sequence ID is set to 0.
@@ -30,8 +31,8 @@ void to(const std_msgs::Header& header, std::chrono::time_point<Clock, Duration>
  * @param frame_id
  * @param header
  */
-template<typename Clock, typename Duration = typename Clock::Duration>
-void to(const std::chrono::time_point<Clock, Duration>& tp, const std::string& frame_id, std_msgs::Header& header);
+template<cppbox::IsTimePoint TimePoint>
+void to(const TimePoint& tp, const std::string& frame_id, std_msgs::Header& header);
 
 }
 

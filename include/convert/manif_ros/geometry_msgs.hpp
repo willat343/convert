@@ -42,4 +42,6 @@ void to(const manif::R3d& r3d, const manif::SO3d& so3d, geometry_msgs::Transform
 
 }
 
+#include "convert/manif_ros/impl/geometry_msgs.hpp"
+
 #endif

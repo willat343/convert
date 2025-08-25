@@ -1,0 +1,10 @@
+#ifndef CONVERT_IMPL_CONVERT_HPP
+#define CONVERT_IMPL_CONVERT_HPP
+
+#if CONVERT_HEADER_ONLY
+#define CONVERT_INLINE inline
+#else
+#define CONVERT_INLINE
+#endif
+
+#endif

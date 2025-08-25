@@ -18,4 +18,6 @@ void to(const nav_msgs::Odometry& msg, gtsam::NavState& navstate);
 
 }
 
+#include "convert/gtsam_ros/impl/navigation_nav_msgs.hpp"
+
 #endif

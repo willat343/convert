@@ -1,13 +1,12 @@
-#include "convert/foxglove_std/foxglove_std.hpp"
-
-#include <cassert>
+#include "convert/foxglove_std/impl/foxglove_std.impl.hpp"
 
 namespace convert {
 
-void to(const std::chrono::nanoseconds& in, foxglove::schemas::Timestamp& out) {
-    assert(in >= std::chrono::nanoseconds(0));
-    out.sec = static_cast<uint32_t>(in / std::chrono::seconds(1));
-    out.nsec = static_cast<uint32_t>(std::abs((in % std::chrono::seconds(1)) / std::chrono::nanoseconds(1)));
-}
+template void to<std::chrono::steady_clock, std::chrono::steady_clock::duration>(
+        const std::chrono::time_point<std::chrono::steady_clock, std::chrono::steady_clock::duration>&,
+        foxglove::schemas::Timestamp&);
+template void to<std::chrono::system_clock, std::chrono::system_clock::duration>(
+        const std::chrono::time_point<std::chrono::system_clock, std::chrono::system_clock::duration>&,
+        foxglove::schemas::Timestamp&);
 
 }

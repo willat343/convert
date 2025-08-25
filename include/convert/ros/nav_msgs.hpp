@@ -18,4 +18,6 @@ void to(const std::vector<nav_msgs::Odometry>& from_msg, nav_msgs::Path& to_msg)
 
 }
 
+#include "convert/ros/impl/nav_msgs.hpp"
+
 #endif

@@ -39,4 +39,13 @@ void to(const Eigen::Matrix<Scalar, int(N), 1>& in, std::array<Scalar, N>& out) 
 
 }
 
+#if !CONVERT_HEADER_ONLY
+namespace convert {
+
+extern template void to<double>(const std::vector<double>&, Eigen::VectorXd&);
+extern template void to<double>(const Eigen::VectorXd&, std::vector<double>&);
+
+}
+#endif
+
 #endif

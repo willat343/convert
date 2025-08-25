@@ -21,8 +21,8 @@ template<cppbox::IsTimePoint TimePoint>
 void to(const matlab::data::StructArray& times_struct_array, std::vector<TimePoint>& times);
 
 template<typename Scalar>
-std::enable_if_t<std::is_fundamental_v<Scalar>, matlab::data::TypedArray<Scalar>> to_array(const Scalar& scalar,
-        matlab::data::ArrayFactory& factory);
+    requires(std::is_fundamental_v<Scalar>)
+matlab::data::TypedArray<Scalar> to_array(const Scalar& scalar, matlab::data::ArrayFactory& factory);
 
 template<typename Scalar>
 matlab::data::TypedArray<Scalar> to_array(const std::vector<Scalar>& vector, matlab::data::ArrayFactory& factory);

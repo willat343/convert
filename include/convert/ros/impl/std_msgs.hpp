@@ -6,19 +6,34 @@
 
 namespace convert {
 
-template<typename Clock, typename Duration>
-void to(const std_msgs::Header& header, std::chrono::time_point<Clock, Duration>& tp, std::string& frame_id) {
+template<cppbox::IsTimePoint TimePoint>
+void to(const std_msgs::Header& header, TimePoint& tp, std::string& frame_id) {
     to(header.stamp, tp);
     frame_id = header.frame_id;
 }
 
-template<typename Clock, typename Duration>
-void to(const std::chrono::time_point<Clock, Duration>& tp, const std::string& frame_id, std_msgs::Header& header) {
+template<cppbox::IsTimePoint TimePoint>
+void to(const TimePoint& tp, const std::string& frame_id, std_msgs::Header& header) {
     header.seq = 0;
     to(tp, header.stamp);
     header.frame_id = frame_id;
 }
 
 }
+
+#if !CONVERT_HEADER_ONLY
+namespace convert {
+
+extern template void to<std::chrono::time_point<std::chrono::steady_clock>>(const std_msgs::Header&,
+        std::chrono::time_point<std::chrono::steady_clock>& tp, std::string& frame_id);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(const std_msgs::Header&,
+        std::chrono::time_point<std::chrono::system_clock>& tp, std::string& frame_id);
+extern template void to<std::chrono::time_point<std::chrono::steady_clock>>(
+        const std::chrono::time_point<std::chrono::steady_clock>& tp, const std::string& frame_id, std_msgs::Header&);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(
+        const std::chrono::time_point<std::chrono::system_clock>& tp, const std::string& frame_id, std_msgs::Header&);
+
+}
+#endif
 
 #endif

@@ -40,8 +40,8 @@ void to(const matlab::data::StructArray& times_struct_array, std::vector<TimePoi
 }
 
 template<typename Scalar>
-inline std::enable_if_t<std::is_fundamental_v<Scalar>, matlab::data::TypedArray<Scalar>> to_array(const Scalar& scalar,
-        matlab::data::ArrayFactory& factory) {
+    requires(std::is_fundamental_v<Scalar>)
+inline matlab::data::TypedArray<Scalar> to_array(const Scalar& scalar, matlab::data::ArrayFactory& factory) {
     return factory.createArray<Scalar>({1, 1}, {scalar});
 }
 
@@ -84,5 +84,27 @@ matlab::data::StructArray to_struct_array(const std::vector<TimePoint>& times, m
 }
 
 }
+
+#if !CONVERT_HEADER_ONLY
+namespace convert {
+
+extern template void to<double>(const matlab::data::TypedArray<double>&, double&);
+extern template void to<double>(const matlab::data::TypedArray<double>&, std::vector<double>&);
+extern template void to<std::chrono::time_point<std::chrono::steady_clock>>(const matlab::data::Struct&,
+        std::chrono::time_point<std::chrono::steady_clock>&);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(const matlab::data::Struct&,
+        std::chrono::time_point<std::chrono::system_clock>&);
+extern template void to<std::chrono::time_point<std::chrono::system_clock>>(const matlab::data::StructArray&,
+        std::vector<std::chrono::time_point<std::chrono::system_clock>>&);
+extern template matlab::data::TypedArray<double> to_array<double>(const double&, matlab::data::ArrayFactory&);
+extern template matlab::data::TypedArray<double> to_array<double>(const std::vector<double>&,
+        matlab::data::ArrayFactory&);
+extern template matlab::data::StructArray to_struct_array<std::chrono::time_point<std::chrono::system_clock>>(
+        const std::chrono::time_point<std::chrono::system_clock>&, matlab::data::ArrayFactory&);
+extern template matlab::data::StructArray to_struct_array<std::chrono::time_point<std::chrono::system_clock>>(
+        const std::vector<std::chrono::time_point<std::chrono::system_clock>>&, matlab::data::ArrayFactory&);
+
+}
+#endif
 
 #endif
