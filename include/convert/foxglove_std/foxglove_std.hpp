@@ -6,6 +6,8 @@
 
 namespace convert {
 
+void to(const std::chrono::nanoseconds& in, foxglove::schemas::Duration& out);
+
 void to(const std::chrono::nanoseconds& in, foxglove::schemas::Timestamp& out);
 
 template<typename Clock, typename Duration = Clock::duration>
