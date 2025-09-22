@@ -42,7 +42,6 @@ template<int D>
     requires(D == 2 || D == 3)
 void to(const std::string& in_parent_frame, const std::string& in_child_frame,
         const Eigen::Transform<double, D, Eigen::Isometry>& in_transform, foxglove::schemas::FrameTransform& out) {
-    out.timestamp = std::nullopt;
     out.parent_frame_id = in_parent_frame;
     out.child_frame_id = in_child_frame;
     out.translation.emplace();
