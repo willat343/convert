@@ -9,12 +9,25 @@ namespace convert {
 
 void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Vector3& out);
 
+void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Point3& out);
+
+void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Vector2& out);
+
+void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Point2& out);
+
 void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Vector2& out);
+
+void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Point2& out);
 
 void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Vector3& out);
 
+void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Point3& out);
+
 template<typename Derived>
 void to(const Eigen::MatrixBase<Derived>& in, foxglove::schemas::Vector3& out);
+
+template<typename Derived>
+void to(const Eigen::MatrixBase<Derived>& in, foxglove::schemas::Point3& out);
 
 void to(const Eigen::Ref<const Eigen::Vector2d>& in_position, const Eigen::Rotation2Dd& in_orientation,
         foxglove::schemas::Pose& out);

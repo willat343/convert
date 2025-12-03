@@ -25,6 +25,22 @@ void to(const Eigen::MatrixBase<Derived>& in, foxglove::schemas::Vector3& out) {
     }
 }
 
+template<typename Derived>
+void to(const Eigen::MatrixBase<Derived>& in, foxglove::schemas::Point3& out) {
+    static_assert(Derived::ColsAtCompileTime == 1, "Input must be a column vector");
+    static_assert(Derived::RowsAtCompileTime == 2 || Derived::RowsAtCompileTime == 3,
+            "Only 2D or 3D vectors supported");
+    if constexpr (Derived::RowsAtCompileTime == 2) {
+        out.x = in[0];
+        out.y = in[1];
+        out.z = 0.0;
+    } else {
+        out.x = in[0];
+        out.y = in[1];
+        out.z = in[2];
+    }
+}
+
 template<int D>
     requires(D == 2 || D == 3)
 void to(const Eigen::Transform<double, D, Eigen::Isometry>& in, foxglove::schemas::Pose& out) {
@@ -62,6 +78,7 @@ void to(const std::string& in_parent_frame, const std::string& in_child_frame,
 namespace convert {
 
 extern template void to<Eigen::Vector3d>(const Eigen::MatrixBase<Eigen::Vector3d>&, foxglove::schemas::Vector3&);
+extern template void to<Eigen::Vector3d>(const Eigen::MatrixBase<Eigen::Vector3d>&, foxglove::schemas::Point3&);
 extern template void to<2>(const Eigen::Isometry2d&, foxglove::schemas::Pose&);
 extern template void to<3>(const Eigen::Isometry3d&, foxglove::schemas::Pose&);
 extern template void to<2>(const std::string& in_parent_frame, const std::string& in_child_frame,

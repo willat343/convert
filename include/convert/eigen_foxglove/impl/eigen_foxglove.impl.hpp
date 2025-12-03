@@ -9,12 +9,39 @@ CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::sc
     out.z = in[2];
 }
 
+CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Point3& out) {
+    out.x = in[0];
+    out.y = in[1];
+    out.z = in[2];
+}
+
+CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Vector2& out) {
+    out.x = in[0];
+    out.y = in[1];
+}
+
+CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector3d>& in, foxglove::schemas::Point2& out) {
+    out.x = in[0];
+    out.y = in[1];
+}
+
 CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Vector2& out) {
     out.x = in[0];
     out.y = in[1];
 }
 
+CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Point2& out) {
+    out.x = in[0];
+    out.y = in[1];
+}
+
 CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Vector3& out) {
+    out.x = in[0];
+    out.y = in[1];
+    out.z = 0.0;
+}
+
+CONVERT_INLINE void to(const Eigen::Ref<const Eigen::Vector2d>& in, foxglove::schemas::Point3& out) {
     out.x = in[0];
     out.y = in[1];
     out.z = 0.0;
