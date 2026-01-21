@@ -9,13 +9,13 @@ Generic type conversion library supporting a variety of data structures.
 | **Dependency** | **Version** | **Description** |
 |----------------|-------------|-----------------|
 | CMake | >= 3.21 | CMake Build Tool |
-| [cmakebox](https://github.com/willat343/cmakebox) | >= 0.0.1 | CMake Functions and Utilities |
+| [cmakebox](https://github.com/willat343/cmakebox) | >= 0.0.9 | CMake Functions and Utilities |
 | [Eigen3] | >= 3.4.0 | Linear Algebra Package |
 | [GTSAM] | - | GATech Smooth and Mapping Package |
 | [manif] | >= 0.0.6 | Lie Theory Package |
 | [MATLAB] | - | MATLAB CXX Interfaces |
 | [ROS] | noetic | Various standard ROS packages |
-| [[sensorbox](https://github.com/willat343/sensorbox)] | 0.6.0 | Sensor Processing Package |
+| [[sensorbox](https://github.com/willat343/sensorbox)] | 0.6.4 | Sensor Processing Package |
 
 Note that square brackets indicate optional dependencies.
 
@@ -27,7 +27,7 @@ There are several ways to include `convert` within your project:
 
 It is recommended to leverage the functionality of [cmakebox](https://github.com/willat343/cmakebox) by including the following lines in the `CMakeLists.txt` (replace `X.Y.Z` with version):
 ```CMake
-set(CMAKEBOX_VERSION "0.0.1")
+set(CMAKEBOX_VERSION "0.0.9")
 FetchContent_Declare(
     cmakebox
     GIT_REPOSITORY git@github.com:willat343/cmakebox.git
