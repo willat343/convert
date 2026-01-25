@@ -34,7 +34,7 @@ void to(const Eigen::AngleAxis<Scalar>& aa, Eigen::Matrix<Scalar, 3, 1>& v);
  *
  * @tparam Scalar
  * @param t
- * @param r
+ * @param q
  * @param T
  */
 template<typename Scalar>
@@ -46,7 +46,7 @@ void to(const Eigen::Translation<Scalar, 2>& t, const Eigen::Rotation2D<Scalar>&
  *
  * @tparam Scalar
  * @param t
- * @param r
+ * @param q
  * @param T
  */
 template<typename Scalar>

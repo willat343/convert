@@ -444,7 +444,8 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
 
     # Build Documentation
     if (BUILD_DOCUMENTATION)
-        find_package(Doxygen REQUIRED)
+        set(DOXYGEN_VERSION "1.16.0")
+        import_doxygen(VERSION ${DOXYGEN_VERSION})
         set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
         configure_file(Doxyfile.in ${DOXYGEN_OUT})
         add_custom_target(${PROJECT_NAME}_documentation ALL
@@ -453,6 +454,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
             COMMENT "Generating documentation with doxygen."
             VERBATIM
         )
+        add_dependencies(${PROJECT_NAME}_documentation doxygen)
     endif()
 
     # Build tests

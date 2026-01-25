@@ -71,7 +71,7 @@ std::vector<ToType> to_for_each_in(const std::vector<FromType>& from);
  * @tparam ToType
  * @tparam FromType
  * @param from
- * @return std::optional<ToType>
+ * @param out
  */
 template<typename ToType, typename FromType>
 void to_optional(const std::optional<FromType>& from, std::optional<ToType>& out);
