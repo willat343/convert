@@ -23,14 +23,29 @@ void adl_serializer<Eigen::Matrix<Scalar, Rows, Cols, Options, MaxRows, MaxCols>
         Eigen::Matrix<Scalar, Rows, Cols, Options, MaxRows, MaxCols>& m) {
     assert(j.is_array());
     const int rows = j.size();
-    const int cols = rows > 0 ? j.at(0).size() : 0;
-    m.resize(rows, cols);
-    for (int r = 0; r < rows; ++r) {
-        const json& row = j.at(r);
-        assert(row.is_array());
-        assert(row.size() == cols);
-        for (int c = 0; c < cols; ++c) {
-            m(r, c) = row.at(c).get<Scalar>();
+    if (rows > 0 && j.at(0).is_array()) {
+        // Nested array
+        const int cols = j.at(0).size();
+        m.resize(rows, cols);
+        for (int r = 0; r < rows; ++r) {
+            const json& row = j.at(r);
+            assert(row.is_array());
+            assert(row.size() == cols);
+            for (int c = 0; c < cols; ++c) {
+                m(r, c) = row.at(c).get<Scalar>();
+            }
+        }
+    } else {
+        // Flat array
+        if constexpr (Cols == 1 || (Rows == Eigen::Dynamic && Cols == Eigen::Dynamic)) {
+            // Column vector
+            m.resize(rows, 1);
+        } else {
+            // Row vector
+            m.resize(1, rows);
+        }
+        for (int r = 0; r < rows; ++r) {
+            m(r) = j.at(r).get<Scalar>();
         }
     }
 }

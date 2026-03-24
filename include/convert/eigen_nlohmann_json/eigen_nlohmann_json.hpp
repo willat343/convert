@@ -19,7 +19,17 @@ namespace nlohmann {
  *
  * Json is stored as an array of arrays representing matrix rows.
  *
- * Note: works for RowMajor and ColMajor, fixed and dynamic matrics.
+ * NOTE: Works for RowMajor and ColMajor, fixed and dynamic matrics.
+ *
+ * NOTE: Flat arrays during deserialization are acceptable as a special case, in which case the data is treated as a
+ * vector. Differentiation between column or row vector is done by checking `Rows` and `Cols` in the (templated) result,
+ * with column vector by default if ambiguous. This function never produces flat arrays during serialisation, but taking
+ * the first array of the transpose of a column vector can produce the intended result:
+ * ```
+ * const Eigen::VectorXd in{{1.0, 2.0, 3.0, 4.0}};
+ * const nlohmann::json j = in.transpose().eval();
+ * const Eigen::MatrixXd out = j.at(0).get<Eigen::VectorXd>();
+ * ```
  *
  * @tparam Scalar
  * @tparam Rows

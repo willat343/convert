@@ -1,0 +1,61 @@
+#ifndef CONVERT_MANIF_NLOHMANN_JSON_IMPL_MANIF_NLOHMANN_JSON_HPP
+#define CONVERT_MANIF_NLOHMANN_JSON_IMPL_MANIF_NLOHMANN_JSON_HPP
+
+#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
+#include "convert/manif_nlohmann_json/manif_nlohmann_json.hpp"
+
+namespace nlohmann {
+
+template<typename Scalar, unsigned int N>
+void adl_serializer<manif::Rn<Scalar, N>>::to_json(json& j, const manif::Rn<Scalar, N>& m) {
+    j = m.coeffs();
+}
+
+template<typename Scalar, unsigned int N>
+void adl_serializer<manif::Rn<Scalar, N>>::from_json(const json& j, manif::Rn<Scalar, N>& m) {
+    m = manif::Rn<Scalar, N>(j.get<Eigen::Vector<Scalar, N>>());
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SO2<Scalar>>::to_json(json& j, const manif::SO2<Scalar>& m) {
+    j = Eigen::Rotation2D<Scalar>(m.angle());
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SO2<Scalar>>::from_json(const json& j, manif::SO2<Scalar>& m) {
+    m = manif::SO2<Scalar>(j.get<Eigen::Rotation2D<Scalar>>().angle());
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SO3<Scalar>>::to_json(json& j, const manif::SO3<Scalar>& m) {
+    j = m.quat();
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SO3<Scalar>>::from_json(const json& j, manif::SO3<Scalar>& m) {
+    m = manif::SO3<Scalar>(j.get<Eigen::Quaternion<Scalar>>());
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SE2<Scalar>>::to_json(json& j, const manif::SE2<Scalar>& m) {
+    j = m.isometry();
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SE2<Scalar>>::from_json(const json& j, manif::SE2<Scalar>& m) {
+    m = manif::SE2<Scalar>(j.get<Eigen::Transform<Scalar, 2, Eigen::Isometry>>());
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SE3<Scalar>>::to_json(json& j, const manif::SE3<Scalar>& m) {
+    j = m.isometry();
+}
+
+template<typename Scalar>
+void adl_serializer<manif::SE3<Scalar>>::from_json(const json& j, manif::SE3<Scalar>& m) {
+    m = manif::SE3<Scalar>(j.get<Eigen::Transform<Scalar, 3, Eigen::Isometry>>());
+}
+
+}
+
+#endif

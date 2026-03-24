@@ -225,6 +225,20 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_NLOHMANN_JSON_COMPONENTS)
     )
 endif()
 
+if (BUILD_MANIF_COMPONENTS AND BUILD_NLOHMANN_JSON_COMPONENTS)
+    # Append to source files
+    # list(APPEND convert_SRC_FILES)
+
+    # Append to definitions
+    list(APPEND convert_DEFINITIONS CONVERT_MANIF CONVERT_NLOHMANN_JSON)
+
+    # Append to system libraries
+    list(APPEND convert_SYSTEM_LIBRARIES
+        MANIF::manif
+        nlohmann_json::nlohmann_json
+    )
+endif()
+
 if (BUILD_FOXGLOVE_COMPONENTS)
     # Append to source files
     list(APPEND convert_SRC_FILES

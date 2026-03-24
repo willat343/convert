@@ -16,6 +16,34 @@ TEST(json_matrix, to_from_2x4Xd) {
     EXPECT_EQ(in, out);
 }
 
+TEST(json_vector, to_from_4x1Xd) {
+    const Eigen::VectorXd in{{1.0, 2.0, 3.0, 4.0}};
+    const nlohmann::json j = in;
+    const Eigen::VectorXd out = j.get<Eigen::VectorXd>();
+    EXPECT_EQ(in, out);
+}
+
+TEST(json_vector, to_from_1x4Xd) {
+    const Eigen::RowVectorXd in{{1.0, 2.0, 3.0, 4.0}};
+    const nlohmann::json j = in;
+    const Eigen::RowVectorXd out = j.get<Eigen::RowVectorXd>();
+    EXPECT_EQ(in, out);
+}
+
+TEST(json_vector, to_from_4x1Xd_special_case) {
+    const Eigen::VectorXd in{{1.0, 2.0, 3.0, 4.0}};
+    const nlohmann::json j = in.transpose().eval();
+    const Eigen::VectorXd out = j.at(0).get<Eigen::VectorXd>();
+    EXPECT_EQ(in, out);
+}
+
+TEST(json_vector, to_from_4x1Xd_special_case_row) {
+    const Eigen::VectorXd in{{1.0, 2.0, 3.0, 4.0}};
+    const nlohmann::json j = in.transpose().eval();
+    const Eigen::RowVectorXd out = j.at(0).get<Eigen::RowVectorXd>();
+    EXPECT_EQ(in, out.transpose());
+}
+
 TEST(json_quaternion, to_from_d) {
     const Eigen::Quaterniond in = Eigen::Quaterniond(1.0, 2.0, 3.0, 4.0).normalized();
     const nlohmann::json j = in;
