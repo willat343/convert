@@ -38,22 +38,26 @@ void adl_serializer<manif::SO3<Scalar>>::from_json(const json& j, manif::SO3<Sca
 
 template<typename Scalar>
 void adl_serializer<manif::SE2<Scalar>>::to_json(json& j, const manif::SE2<Scalar>& m) {
-    j = m.isometry();
+    j["position"] = Eigen::Translation<Scalar, 2>(m.translation());
+    j["orientation"] = Eigen::Rotation2D<Scalar>(m.rotation());
 }
 
 template<typename Scalar>
 void adl_serializer<manif::SE2<Scalar>>::from_json(const json& j, manif::SE2<Scalar>& m) {
-    m = manif::SE2<Scalar>(j.get<Eigen::Transform<Scalar, 2, Eigen::Isometry>>());
+    m = manif::SE2<Scalar>(
+            j["position"].get<Eigen::Translation<Scalar, 2>>() * j["orientation"].get<Eigen::Rotation2D<Scalar>>());
 }
 
 template<typename Scalar>
 void adl_serializer<manif::SE3<Scalar>>::to_json(json& j, const manif::SE3<Scalar>& m) {
-    j = m.isometry();
+    j["position"] = Eigen::Translation<Scalar, 3>(m.translation());
+    j["orientation"] = m.quat();
 }
 
 template<typename Scalar>
 void adl_serializer<manif::SE3<Scalar>>::from_json(const json& j, manif::SE3<Scalar>& m) {
-    m = manif::SE3<Scalar>(j.get<Eigen::Transform<Scalar, 3, Eigen::Isometry>>());
+    m = manif::SE3<Scalar>(
+            j["position"].get<Eigen::Translation<Scalar, 3>>() * j["orientation"].get<Eigen::Quaternion<Scalar>>());
 }
 
 }
