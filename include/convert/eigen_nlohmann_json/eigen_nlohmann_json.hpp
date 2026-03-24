@@ -30,6 +30,12 @@ namespace nlohmann {
  * const nlohmann::json j = in.transpose().eval();
  * const Eigen::MatrixXd out = j.at(0).get<Eigen::VectorXd>();
  * ```
+ * Alternatively pass the transpose object itself does not call this serializer, and generates flat arrays:
+ * ```
+ * const Eigen::VectorXd in{{1.0, 2.0, 3.0, 4.0}};
+ * const nlohmann::json j = in.transpose();
+ * const Eigen::MatrixXd out = j.get<Eigen::VectorXd>();
+ * ```
  *
  * @tparam Scalar
  * @tparam Rows
