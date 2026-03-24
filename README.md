@@ -11,9 +11,11 @@ Generic type conversion library supporting a variety of data structures.
 | CMake | >= 3.21 | CMake Build Tool |
 | [cmakebox](https://github.com/willat343/cmakebox) | >= 0.0.9 | CMake Functions and Utilities |
 | [Eigen3] | >= 3.4.0 | Linear Algebra Package |
+| [foxglove] | - | Foxglove interfaces |
 | [GTSAM] | - | GATech Smooth and Mapping Package |
 | [manif] | >= 0.0.6 | Lie Theory Package |
 | [MATLAB] | - | MATLAB CXX Interfaces |
+| [nlohmann_json] | - | JSON Interfaces |
 | [ROS] | noetic | Various standard ROS packages |
 | [[sensorbox](https://github.com/willat343/sensorbox)] | 0.6.4 | Sensor Processing Package |
 

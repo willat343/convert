@@ -22,6 +22,7 @@ option(BUILD_MANIF_COMPONENTS "Build manif Components" OFF)
 option(BUILD_FOXGLOVE_COMPONENTS "Build foxglove Components" OFF)
 option(BUILD_GTSAM_COMPONENTS "Build GTSAM Components" OFF)
 option(BUILD_MATLAB_COMPONENTS "Build MATLAB Components" OFF)
+option(BUILD_NLOHMANN_JSON_COMPONENTS "Build nlohmann_json Components" OFF)
 option(BUILD_ROS_COMPONENTS "Build ROS Components" OFF)
 option(BUILD_SHARED_LIBS "Build shared library (if CONVERT_HEADER_ONLY=OFF)" OFF)
 option(CONVERT_HEADER_ONLY "Build library as header-only" OFF)
@@ -104,6 +105,14 @@ if (BUILD_MATLAB_COMPONENTS AND NOT TARGET Matlab::matlab)
     find_package(Matlab ${MATLAB_VERSION} REQUIRED MEX_COMPILER)
 endif()
 
+# Optional Dependency: json (Target: nlohmann_json::nlohmann_json)
+if (BUILD_NLOHMANN_JSON_COMPONENTS)
+    set(NLOHMANN_JSON_VERSION "3.8.0")
+    import_nlohmann_json(
+        VERSION ${NLOHMANN_JSON_VERSION}
+    )
+endif()
+
 # Optional Dependency: ROS 1
 if (BUILD_ROS_COMPONENTS)
     find_package(geometry_msgs REQUIRED)
@@ -120,6 +129,7 @@ foreach(BUILD_COMPONENT
     BUILD_FOXGLOVE_COMPONENTS
     BUILD_GTSAM_COMPONENTS
     BUILD_MATLAB_COMPONENTS
+    BUILD_NLOHMANN_JSON_COMPONENTS
     BUILD_ROS_COMPONENTS)
     if (${BUILD_COMPONENT})
         math(EXPR NUM_BUILD_COMPONENTS "${NUM_BUILD_COMPONENTS} + 1")
@@ -198,6 +208,20 @@ if (BUILD_EIGEN_COMPONENTS AND BUILD_GTSAM_COMPONENTS)
     list(APPEND convert_SYSTEM_LIBRARIES
         Eigen3::Eigen
         gtsam
+    )
+endif()
+
+if (BUILD_EIGEN_COMPONENTS AND BUILD_NLOHMANN_JSON_COMPONENTS)
+    # Append to source files
+    # list(APPEND convert_SRC_FILES)
+
+    # Append to definitions
+    list(APPEND convert_DEFINITIONS CONVERT_EIGEN CONVERT_NLOHMANN_JSON)
+
+    # Append to system libraries
+    list(APPEND convert_SYSTEM_LIBRARIES
+        Eigen3::Eigen
+        nlohmann_json::nlohmann_json
     )
 endif()
 
@@ -327,12 +351,13 @@ list(REMOVE_DUPLICATES convert_EXPORT_TARGETS)
 
 # Report components that will be built
 message(NOTICE "Components (${NUM_BUILD_COMPONENTS} ENABLED):")
-message(NOTICE "\t    EIGEN = ${BUILD_EIGEN_COMPONENTS}")
-message(NOTICE "\t FOXGLOVE = ${BUILD_FOXGLOVE_COMPONENTS}")
-message(NOTICE "\t    GTSAM = ${BUILD_GTSAM_COMPONENTS}")
-message(NOTICE "\t    MANIF = ${BUILD_MANIF_COMPONENTS}")
-message(NOTICE "\t   MATLAB = ${BUILD_MATLAB_COMPONENTS}")
-message(NOTICE "\t      ROS = ${BUILD_ROS_COMPONENTS}")
+message(NOTICE "\t         EIGEN = ${BUILD_EIGEN_COMPONENTS}")
+message(NOTICE "\t      FOXGLOVE = ${BUILD_FOXGLOVE_COMPONENTS}")
+message(NOTICE "\t         GTSAM = ${BUILD_GTSAM_COMPONENTS}")
+message(NOTICE "\t         MANIF = ${BUILD_MANIF_COMPONENTS}")
+message(NOTICE "\t        MATLAB = ${BUILD_MATLAB_COMPONENTS}")
+message(NOTICE "\t NLOHMANN_JSON = ${BUILD_NLOHMANN_JSON_COMPONENTS}")
+message(NOTICE "\t           ROS = ${BUILD_ROS_COMPONENTS}")
 
 # Compile of library and tests
 if (NUM_BUILD_COMPONENTS GREATER 0)
@@ -351,7 +376,9 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
 
         # Private Compile Options
         target_compile_options(${LIBRARY_NAME} PRIVATE
-            -Wall -Wextra -Wpedantic
+            -Wall
+            -Wextra
+            -Wpedantic
         )
     endif()
     add_library(${PROJECT_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})

@@ -17,6 +17,9 @@
 #if defined(CONVERT_EIGEN) && defined(CONVERT_FOXGLOVE)
 #include "convert/eigen_foxglove/eigen_foxglove.hpp"
 #endif
+#if defined(CONVERT_EIGEN) && defined(CONVERT_NLOHMANN_JSON)
+#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
+#endif
 #if defined(CONVERT_FOXGLOVE)
 #include "convert/foxglove_std/foxglove_std.hpp"
 #endif

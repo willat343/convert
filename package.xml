@@ -16,6 +16,7 @@
     <exec_depend>geometry_msgs</exec_depend>
     <exec_depend>gtsam</exec_depend>
     <exec_depend>manif</exec_depend>
+    <exec_depend>nlohmann_json</exec_depend>
     <exec_depend>nav_msgs</exec_depend>
     <exec_depend>sensorbox</exec_depend>
     <exec_depend>sensor_msgs</exec_depend>
