@@ -1,6 +1,6 @@
-#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
-
 #include <gtest/gtest.h>
+
+#include "convert/eigen_json/eigen_json.hpp"
 
 TEST(json_matrix, to_from_2x4d) {
     const Eigen::Matrix<double, 2, 4> in{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};

@@ -203,6 +203,6 @@ struct adl_serializer<Eigen::Transform<Scalar, Dim, Mode, Options>> {
 
 }
 
-#include "convert/eigen_nlohmann_json/impl/eigen_nlohmann_json.hpp"
+#include "convert/eigen_json/impl/eigen_json.hpp"
 
 #endif

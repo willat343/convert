@@ -104,6 +104,6 @@ struct adl_serializer<manif::SE3<Scalar>> {
 
 }
 
-#include "convert/manif_nlohmann_json/impl/manif_nlohmann_json.hpp"
+#include "convert/manif_json/impl/manif_json.hpp"
 
 #endif

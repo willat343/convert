@@ -18,14 +18,14 @@ endif()
 if (BUILD_EIGEN_COMPONENTS AND BUILD_NLOHMANN_JSON_COMPONENTS)
     # Append to source files
     list(APPEND convert_TEST_SRC_FILES
-        src/eigen_nlohmann_json/eigen_nlohmann_json.cpp
+        src/eigen_json/eigen_json.cpp
     )
 endif()
 
 if (BUILD_MANIF_COMPONENTS AND BUILD_NLOHMANN_JSON_COMPONENTS)
     # Append to source files
     list(APPEND convert_TEST_SRC_FILES
-        src/manif_nlohmann_json/manif_nlohmann_json.cpp
+        src/manif_json/manif_json.cpp
     )
 endif()
 

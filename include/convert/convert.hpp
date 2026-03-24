@@ -18,7 +18,7 @@
 #include "convert/eigen_foxglove/eigen_foxglove.hpp"
 #endif
 #if defined(CONVERT_EIGEN) && defined(CONVERT_NLOHMANN_JSON)
-#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
+#include "convert/eigen_json/eigen_json.hpp"
 #endif
 #if defined(CONVERT_FOXGLOVE)
 #include "convert/foxglove_std/foxglove_std.hpp"
@@ -27,7 +27,7 @@
 #include "convert/gtsam_ros/gtsam_ros.hpp"
 #endif
 #if defined(CONVERT_MANIF) && defined(CONVERT_NLOHMANN_JSON)
-#include "convert/manif_nlohmann_json/manif_nlohmann_json.hpp"
+#include "convert/manif_json/manif_json.hpp"
 #endif
 #if defined(CONVERT_MANIF) && defined(CONVERT_ROS)
 #include "convert/manif_ros/manif_ros.hpp"

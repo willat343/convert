@@ -1,8 +1,8 @@
 #ifndef CONVERT_MANIF_NLOHMANN_JSON_IMPL_MANIF_NLOHMANN_JSON_HPP
 #define CONVERT_MANIF_NLOHMANN_JSON_IMPL_MANIF_NLOHMANN_JSON_HPP
 
-#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
-#include "convert/manif_nlohmann_json/manif_nlohmann_json.hpp"
+#include "convert/eigen_json/eigen_json.hpp"
+#include "convert/manif_json/manif_json.hpp"
 
 namespace nlohmann {
 

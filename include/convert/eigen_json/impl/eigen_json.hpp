@@ -1,7 +1,7 @@
 #ifndef CONVERT_EIGEN_NLOHMANN_JSON_IMPL_EIGEN_NLOHMANN_JSON_HPP
 #define CONVERT_EIGEN_NLOHMANN_JSON_IMPL_EIGEN_NLOHMANN_JSON_HPP
 
-#include "convert/eigen_nlohmann_json/eigen_nlohmann_json.hpp"
+#include "convert/eigen_json/eigen_json.hpp"
 
 namespace nlohmann {
 
