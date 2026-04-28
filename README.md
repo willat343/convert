@@ -196,7 +196,7 @@ Then open the file `refman.pdf`.
 
 ## Tests
 
-Tests must be turned on by setting the `-DBUILD_TESTS=ON` cmake argument.
+Tests must be turned on by setting the `-DBUILD_TESTING=ON` cmake argument.
 
 They can then be run with `ctest`:
 ```bash

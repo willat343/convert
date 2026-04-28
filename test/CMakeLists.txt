@@ -80,7 +80,9 @@ if (convert_TEST_SRC_FILES)
 
     # Compile Options
     target_compile_options(${PROJECT_NAME}_tests PRIVATE
-        -Wall -Wextra -Wpedantic -ftemplate-backtrace-limit=${TEMPLATE_BACKTRACE_LIMIT}
+        -Wall
+        -Wextra
+        -Wpedantic
     )
 
     # Include Directories

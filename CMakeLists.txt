@@ -499,7 +499,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
     endif()
 
     # Build tests
-    if(BUILD_TESTS)
+    if(BUILD_TESTING)
         add_subdirectory(test)
     endif()
 else()
