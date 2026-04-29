@@ -64,8 +64,8 @@ FetchContent_MakeAvailable(convert)
 ### Clone
 
 ```bash
-git clone git@github.com:willat343/cppbox.git
-cd cppbox
+git clone git@github.com:willat343/convert.git
+cd convert
 ```
 
 ### Configure
