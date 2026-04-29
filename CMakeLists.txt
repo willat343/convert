@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(convert
-    VERSION 0.6.4
+    VERSION 0.7.0
     DESCRIPTION "Conversion Library"
     LANGUAGES CXX
 )
@@ -41,7 +41,7 @@ if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
 endif()
 
 # Dependency: cmakebox
-set(CMAKEBOX_VERSION "0.0.8")
+set(CMAKEBOX_VERSION "0.0.11")
 FetchContent_Declare(
     cmakebox
     GIT_REPOSITORY git@github.com:willat343/cmakebox.git
@@ -58,7 +58,7 @@ setup_build_type()
 get_cxx_compiler_info()
 
 # Dependency: cppbox (Target: cppbox::cppbox)
-set(CPPBOX_VERSION "0.1.4")
+set(CPPBOX_VERSION "0.2.0")
 import_dependency(
     cppbox
     TARGET cppbox::cppbox
