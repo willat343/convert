@@ -30,7 +30,7 @@ void adl_serializer<Eigen::Matrix<Scalar, Rows, Cols, Options, MaxRows, MaxCols>
         for (int r = 0; r < rows; ++r) {
             const json& row = j.at(r);
             assert(row.is_array());
-            assert(row.size() == cols);
+            assert(static_cast<int>(row.size()) == cols);
             for (int c = 0; c < cols; ++c) {
                 m(r, c) = row.at(c).get<Scalar>();
             }
