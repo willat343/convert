@@ -83,6 +83,9 @@ if (convert_TEST_SRC_FILES)
         -Wall
         -Wextra
         -Wpedantic
+        -Wfatal-errors
+        $<$<BOOL:${DEBUG_ENABLE_ADDRESS_SANITIZER}>:-fsanitize=address>
+        $<$<BOOL:${DEBUG_NO_OMIT_FRAME_POINTER}>:-fno-omit-frame-pointer>
     )
 
     # Include Directories
@@ -100,6 +103,11 @@ if (convert_TEST_SRC_FILES)
     target_link_libraries(${PROJECT_NAME}_tests PUBLIC
         ${PROJECT_NAME}
         ${convert_TEST_SYSTEM_LIBRARIES}
+    )
+
+    # Link Options
+    target_link_options(${PROJECT_NAME}_tests PRIVATE
+        $<$<BOOL:${DEBUG_ENABLE_ADDRESS_SANITIZER}>:-fsanitize=address>
     )
 
     # Enable ctest
