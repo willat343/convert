@@ -43,7 +43,13 @@ if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
 endif()
 
 # Dependency: cmakebox
-set(CMAKEBOX_VERSION "0.0.11")
+set(CMAKEBOX_MINIMUM_VERSION "0.0.13")
+if (NOT DEFINED CMAKEBOX_VERSION)
+    set(CMAKEBOX_VERSION "${CMAKEBOX_MINIMUM_VERSION}" CACHE STRING "Version of cmakebox to fetch")
+endif()
+if (CMAKEBOX_VERSION VERSION_LESS CMAKEBOX_MINIMUM_VERSION)
+    message(FATAL_ERROR "CMAKEBOX_VERSION ${CMAKEBOX_VERSION} was less than minimum ${CMAKEBOX_MINIMUM_VERSION}.")
+endif()
 FetchContent_Declare(
     cmakebox
     GIT_REPOSITORY git@github.com:willat343/cmakebox.git
@@ -60,7 +66,7 @@ setup_build_type()
 get_cxx_compiler_info()
 
 # Dependency: cppbox (Target: cppbox::cppbox)
-set(CPPBOX_VERSION "0.2.0")
+dependency_version(CPPBOX MINIMUM_VERSION "0.2.0")
 import_dependency(
     cppbox
     TARGET cppbox::cppbox
@@ -72,7 +78,7 @@ import_dependency(
 
 # Optional Dependency: Eigen3 (Target: Eigen3::Eigen)
 if (BUILD_EIGEN_COMPONENTS)
-    set(EIGEN3_VERSION "3.4.0")
+    dependency_version(EIGEN3 MINIMUM_VERSION "3.4.0")
     import_Eigen3(
         VERSION ${EIGEN3_VERSION}
     )
@@ -80,7 +86,7 @@ endif()
 
 # Optional Dependency: foxglove (Target: foxglove::foxglove)
 if (BUILD_FOXGLOVE_COMPONENTS)
-    set(FOXGLOVE_VERSION "0.10.1")
+    dependency_version(FOXGLOVE MINIMUM_VERSION "0.10.1")
     import_foxglove(
         VERSION ${FOXGLOVE_VERSION}
     )
@@ -88,7 +94,7 @@ endif()
 
 # Optional Dependency: manif (Target: MANIF::manif)
 if (BUILD_MANIF_COMPONENTS)
-    set(MANIF_VERSION "0.0.6")
+    dependency_version(MANIF MINIMUM_VERSION "0.0.6")
     import_manif(
         VERSION ${MANIF_VERSION}
     )
@@ -109,7 +115,7 @@ endif()
 
 # Optional Dependency: json (Target: nlohmann_json::nlohmann_json)
 if (BUILD_NLOHMANN_JSON_COMPONENTS)
-    set(NLOHMANN_JSON_VERSION "3.8.0")
+    dependency_version(NLOHMANN_JSON MINIMUM_VERSION "3.8.0")
     import_nlohmann_json(
         VERSION ${NLOHMANN_JSON_VERSION}
     )
@@ -495,7 +501,7 @@ if (NUM_BUILD_COMPONENTS GREATER 0)
 
     # Build Documentation
     if (BUILD_DOCUMENTATION)
-        set(DOXYGEN_VERSION "1.16.0")
+        dependency_version(DOXYGEN MINIMUM_VERSION "1.16.0")
         import_doxygen(VERSION ${DOXYGEN_VERSION})
         set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
         configure_file(Doxyfile.in ${DOXYGEN_OUT})
