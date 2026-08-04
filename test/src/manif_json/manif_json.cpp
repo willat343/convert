@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include "convert/manif_json/manif_json.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(json_r1, to_from_d) {
     const manif::R1d in(Eigen::Matrix<double, 1, 1>(1.0));
