@@ -29,6 +29,10 @@ option(CONVERT_HEADER_ONLY "Build library as header-only" OFF)
 option(DEVELOPER_MODE "Use local versions of cmakebox, cppbox, mathbox, and convert" OFF)
 option(DEBUG_ENABLE_ADDRESS_SANITIZER "Enables address sanitizer compile/link flags" OFF)
 option(DEBUG_NO_OMIT_FRAME_POINTER "Add compile flag for more reliable stack traces" OFF)
+option(EXPORT_COMPILE_COMMANDS "Export compile_commands.json for IDE tooling (e.g. clangd, VSCode IntelliSense)" ON)
+if (EXPORT_COMPILE_COMMANDS)
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 
 # Configure FetchContent source directories for DEVELOPER_MODE
 if (DEVELOPER_MODE)
