@@ -1,0 +1,16 @@
+{
+    "hooks": {
+        "PostToolUse": [
+            {
+                "matcher": "Write|Edit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "f=$(jq -r '.tool_input.file_path // empty'); if [ -n \"$f\" ]; then case \"$f\" in *.cpp|*.hpp|*.cc|*.h|*.cxx|*.hxx) CF=$(command -v clang-format 2>/dev/null); if [ -z \"$CF\" ]; then CF=$(ls $HOME/.vscode/extensions/ms-vscode.cpptools-*/LLVM/bin/clang-format 2>/dev/null | head -1); fi; if [ -n \"$CF\" ] && [ -f \"$f\" ]; then \"$CF\" -i \"$f\"; fi ;; esac; fi",
+                        "timeout": 10
+                    }
+                ]
+            }
+        ]
+    }
+}
