@@ -10,6 +10,16 @@
                         "timeout": 10
                     }
                 ]
+            },
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" || exit 0; CF=$(command -v clang-format 2>/dev/null); if [ -z \"$CF\" ]; then CF=$(ls $HOME/.vscode/extensions/ms-vscode.cpptools-*/LLVM/bin/clang-format 2>/dev/null | head -1); fi; [ -n \"$CF\" ] || exit 0; git diff --name-only --diff-filter=d -- '*.cpp' '*.hpp' '*.cc' '*.h' '*.cxx' '*.hxx' | while IFS= read -r f; do if [ -f \"$f\" ] && [ -n \"$(find \"$f\" -newermt '-120 seconds' 2>/dev/null)\" ]; then \"$CF\" -i \"$f\"; fi; done",
+                        "timeout": 20
+                    }
+                ]
             }
         ]
     }
