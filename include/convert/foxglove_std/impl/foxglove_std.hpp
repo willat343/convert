@@ -5,7 +5,7 @@
 
 namespace convert {
 
-template<typename Clock, typename Duration = Clock::duration>
+template<typename Clock, typename Duration>
     requires(std::chrono::is_clock_v<Clock>)
 void to(const std::chrono::time_point<Clock, Duration>& in, foxglove::schemas::Timestamp& out) {
     to(in.time_since_epoch(), out);
