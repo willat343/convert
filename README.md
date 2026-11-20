@@ -9,12 +9,12 @@ Generic type conversion library supporting a variety of data structures.
 | **Dependency** | **Version** | **Description** |
 |----------------|-------------|-----------------|
 | CMake | >= 3.21 | CMake Build Tool |
-| [cmakebox](https://github.com/willat343/cmakebox) | >= 0.0.13 | CMake Functions and Utilities |
+| [cmakebox](https://github.com/willat343/cmakebox) | >= 0.0.17 | CMake Functions and Utilities |
 | [cppbox](https://github.com/willat343/cppbox) | >= 0.2.6 | CMake Functions and Utilities |
 | [Eigen3] | >= 3.4.0 | Linear Algebra Package |
 | [foxglove] | >= 0.10.1 | Foxglove interfaces |
 | [GTSAM] | - | GATech Smooth and Mapping Package |
-| [manif] | >= 0.0.6 | Lie Theory Package |
+| [[manif (fork)](https://github.com/willat343/manif)] | >= 0.0.5.2 | Lie Theory Package |
 | [MATLAB] | - | MATLAB CXX Interfaces |
 | [nlohmann_json] | >= 3.8.0 | JSON Interfaces |
 | [ROS] | noetic | Various standard ROS packages |

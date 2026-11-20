@@ -47,7 +47,7 @@ if (BUILD_MANIF_COMPONENTS AND NOT BUILD_EIGEN_COMPONENTS)
 endif()
 
 # Dependency: cmakebox
-set(CMAKEBOX_MINIMUM_VERSION "0.0.13")
+set(CMAKEBOX_MINIMUM_VERSION "0.0.17")
 if (NOT DEFINED CMAKEBOX_VERSION)
     set(CMAKEBOX_VERSION "${CMAKEBOX_MINIMUM_VERSION}" CACHE STRING "Version of cmakebox to fetch")
 endif()
@@ -98,9 +98,10 @@ endif()
 
 # Optional Dependency: manif (Target: MANIF::manif)
 if (BUILD_MANIF_COMPONENTS)
-    dependency_version(MANIF MINIMUM_VERSION "0.0.6")
+    dependency_version(MANIF MINIMUM_VERSION "0.0.5.2")
     import_manif(
         VERSION ${MANIF_VERSION}
+        FORK
     )
 endif()
 
